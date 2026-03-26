@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WishCraft — Custom Order</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Dancing+Script:wght@700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#d4af37;--gold2:#f0d878;--purple:#c77dff;--pink:#ff6b9d;
+  --bg:#09080f;--card:#ffffff06;--border:#ffffff12;--text:#f0eaff;--textdim:#8a7aaa;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
+
+/* BG */
+.bg-glow{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%,rgba(212,175,55,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%,rgba(199,125,255,0.05) 0%,transparent 60%);}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.star{position:absolute;border-radius:50%;background:white;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.05;}to{opacity:0.7;}}
+
+.page{position:relative;z-index:10;max-width:700px;margin:0 auto;padding:0 16px 120px;}
+
+/* HEADER */
+.header{text-align:center;padding:40px 20px 28px;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.12em;color:var(--textdim);text-decoration:none;margin-bottom:20px;padding:8px 16px;border:1px solid var(--border);border-radius:50px;transition:all 0.2s;cursor:pointer;background:none;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+.crown{font-size:2.5rem;display:block;margin-bottom:10px;animation:crownFloat 3s ease-in-out infinite alternate;}
+@keyframes crownFloat{from{transform:translateY(0);}to{transform:translateY(-8px);}}
+.page-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,7vw,2.8rem);font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:goldShimmer 4s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(212,175,55,0.3));}
+@keyframes goldShimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.page-sub{font-size:0.9rem;color:var(--textdim);font-style:italic;margin-top:8px;line-height:1.6;}
+.price-badge{display:inline-block;margin-top:12px;padding:8px 24px;background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(212,175,55,0.06));border:1px solid rgba(212,175,55,0.3);border-radius:50px;font-family:'Cinzel',serif;font-size:0.88rem;color:var(--gold);letter-spacing:0.08em;}
+.header-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));margin:20px auto 0;border-radius:2px;}
+
+/* SECTION TITLE */
+.section-wrap{margin-bottom:32px;}
+.sec-label{display:inline-flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.sec-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#09080f;font-size:0.7rem;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-weight:600;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,4vw,1.4rem);color:var(--text);font-style:italic;margin-bottom:4px;}
+.sec-hint{font-size:0.85rem;color:var(--textdim);font-style:italic;margin-bottom:14px;}
+
+/* INPUTS */
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.input-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.input-group label{font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--textdim);font-family:'Cinzel',serif;}
+.input-group input,.input-group select,.input-group textarea{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:1rem;outline:none;transition:border 0.2s,box-shadow 0.2s;width:100%;}
+.input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:var(--gold);box-shadow:0 0 12px rgba(212,175,55,0.15);}
+.input-group textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.input-group select option{background:#1a0a2e;color:white;}
+.error-msg{font-size:0.75rem;color:#ff6b6b;font-style:italic;display:none;}
+.input-error{border-color:#ff4444!important;}
+
+.section-divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:28px 0;}
+
+/* THEME VIBE */
+.vibe-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.vibe-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:16px 14px;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:12px;}
+.vibe-card.selected{border-color:var(--gold);box-shadow:0 0 18px rgba(212,175,55,0.15);}
+.vibe-icon{font-size:1.8rem;flex-shrink:0;}
+.vibe-info{flex:1;}
+.vibe-name{font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);}
+.vibe-desc{font-size:0.72rem;color:var(--textdim);margin-top:2px;font-style:italic;}
+.vibe-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;transition:all 0.2s;}
+.vibe-card.selected .vibe-check{background:var(--gold);border-color:var(--gold);color:#09080f;}
+
+/* SUGGESTION CARDS */
+.suggestions-intro{background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(199,125,255,0.04));border:1px solid rgba(212,175,55,0.15);border-radius:16px;padding:16px 18px;margin-bottom:18px;}
+.si-title{font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.si-text{font-size:0.88rem;color:var(--textdim);font-style:italic;line-height:1.6;}
+
+.suggestions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sug-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:14px 12px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
+.sug-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background 0.3s;}
+.sug-card.picked{border-color:var(--gold);box-shadow:0 0 16px rgba(212,175,55,0.12);}
+.sug-card.picked::before{background:linear-gradient(90deg,var(--gold),var(--gold2));}
+.sug-emoji{font-size:1.6rem;display:block;margin-bottom:6px;}
+.sug-name{font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);margin-bottom:4px;}
+.sug-desc{font-size:0.72rem;color:var(--textdim);line-height:1.4;font-style:italic;}
+.sug-badge{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:var(--gold);display:none;align-items:center;justify-content:center;font-size:0.65rem;color:#09080f;font-weight:700;}
+.sug-card.picked .sug-badge{display:flex;}
+.sug-popular{position:absolute;bottom:8px;right:8px;font-size:0.6rem;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.3);border-radius:20px;padding:2px 7px;color:var(--gold);font-family:'Cinzel',serif;letter-spacing:0.05em;}
+
+.picked-count{font-family:'Cinzel',serif;font-size:0.8rem;color:var(--gold);letter-spacing:0.1em;margin-top:10px;text-align:center;}
+
+/* CUSTOM NOTES */
+.notes-box{background:var(--card);border:1px solid rgba(212,175,55,0.15);border-radius:12px;padding:14px 16px;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text);outline:none;width:100%;min-height:110px;resize:vertical;line-height:1.6;transition:border 0.2s;}
+.notes-box:focus{border-color:var(--gold);box-shadow:0 0 12px rgba(212,175,55,0.12);}
+
+/* SUBMIT BUTTON */
+.submit-btn{width:100%;padding:18px;background:linear-gradient(135deg,#8a6010,var(--gold),var(--gold2),var(--gold));background-size:200% 200%;animation:goldShimmer 3s ease-in-out infinite;color:#09080f;border:none;border-radius:16px;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.1em;font-weight:700;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 24px rgba(212,175,55,0.3);margin-top:8px;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,175,55,0.45);}
+
+/* FOOTER */
+.footer{text-align:center;padding:32px 20px;border-top:1px solid var(--border);margin-top:40px;}
+.footer-name{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--gold);}
+.footer-sub{font-size:0.78rem;color:var(--textdim);margin-top:4px;letter-spacing:0.1em;}
+
+/* ORDER MODAL */
+.order-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);z-index:3000;display:none;align-items:flex-end;justify-content:center;}
+.order-modal.show{display:flex;}
+.order-modal-box{width:100%;max-width:600px;background:#0d0818;border:1px solid rgba(212,175,55,0.2);border-radius:24px 24px 0 0;padding:28px 20px 40px;animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.om-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;}
+.om-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-style:italic;color:var(--text);margin-bottom:4px;}
+.om-sub{font-size:0.85rem;color:var(--textdim);margin-bottom:16px;}
+.summary-box{background:#000;border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:rgba(255,255,255,0.75);line-height:1.9;white-space:pre-line;margin-bottom:14px;}
+.pay-section{background:rgba(77,184,255,0.05);border:1px solid rgba(77,184,255,0.15);border-radius:16px;padding:16px;margin-bottom:12px;}
+.pay-title{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#4db8ff;margin-bottom:10px;}
+.pay-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.pay-step:last-child{margin-bottom:0;}
+.ps-n{width:22px;height:22px;border-radius:50%;background:rgba(77,184,255,0.15);border:1px solid rgba(77,184,255,0.3);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:0.65rem;color:#4db8ff;flex-shrink:0;}
+.ps-t{font-size:0.85rem;color:var(--text);line-height:1.5;padding-top:2px;}
+.ps-t strong{color:#4db8ff;}
+.upi-copy{background:rgba(0,0,0,0.3);border:1px solid rgba(77,184,255,0.2);border-radius:10px;padding:10px 14px;font-family:'Cinzel',serif;font-size:0.88rem;color:#4db8ff;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-top:8px;}
+.upi-hint{font-size:0.68rem;color:rgba(77,184,255,0.4);}
+.insta-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(199,125,255,0.07));border:1px solid rgba(212,175,55,0.2);border-radius:12px;text-decoration:none;transition:all 0.2s;margin-top:10px;}
+.insta-btn:hover{border-color:var(--gold);}
+.insta-handle{font-family:'Cinzel',serif;font-size:0.9rem;color:var(--gold);letter-spacing:0.04em;}
+.insta-sub{font-size:0.72rem;color:var(--textdim);margin-top:2px;}
+.om-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.copy-btn{width:100%;padding:13px;background:rgba(212,175,55,0.1);color:var(--gold);border:1px solid rgba(212,175,55,0.25);border-radius:12px;font-family:'Cinzel',serif;font-size:0.82rem;letter-spacing:0.08em;cursor:pointer;}
+.om-close-btn{width:100%;padding:12px;background:none;color:var(--textdim);border:1px solid var(--border);border-radius:12px;font-family:'Cinzel',serif;font-size:0.8rem;cursor:pointer;}
+
+/* STICKY PRICE BAR */
+.sticky-price{
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:rgba(9,8,15,0.95);border-top:1px solid rgba(212,175,55,0.2);
+  backdrop-filter:blur(12px);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.sp-left{display:flex;flex-direction:column;gap:2px;}
+.sp-total{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--gold);font-weight:600;letter-spacing:0.05em;}
+.sp-breakdown{font-size:0.72rem;color:var(--textdim);font-style:italic;}
+.sp-btn{padding:10px 24px;background:linear-gradient(135deg,#8a6010,var(--gold),var(--gold2));color:#09080f;border:none;border-radius:50px;font-family:'Cinzel',serif;font-size:0.82rem;letter-spacing:0.08em;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;box-shadow:0 4px 16px rgba(212,175,55,0.3);}
+
+/* PRICE BREAKDOWN */
+.price-breakdown{background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.15);border-radius:12px;padding:12px 16px;margin-top:10px;font-size:0.82rem;color:var(--textdim);line-height:1.8;}
+.price-breakdown strong{color:var(--gold);}
+
+/* EXTRA FEATURE BADGE on card */
+.sug-card.extra-feature::after{content:'+ ₹30';position:absolute;bottom:8px;left:8px;font-size:0.6rem;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.3);border-radius:20px;padding:2px 7px;color:var(--gold);font-family:'Cinzel',serif;letter-spacing:0.05em;}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);border-radius:50px;padding:10px 24px;font-family:'Cinzel',serif;font-size:0.78rem;color:var(--gold);z-index:9999;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="stars" id="stars"></div>
+<div class="toast" id="toast">📋 Copied!</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">← Back to templates</button>
+    <span class="crown">👑</span>
+    <div class="page-title">Custom Order</div>
+    <p class="page-sub">Something completely unique — built just for you.<br>No two custom orders are ever the same. ✨</p>
+    <div class="price-badge" id="priceBadge">👑 Custom Package — ₹299</div>
+    <p style="font-size:0.78rem;color:rgba(212,175,55,0.45);margin-top:8px;font-style:italic;">Includes 5 features · ₹30 per extra feature</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- STEP 1: DETAILS -->
+  <div class="section-wrap">
+    <div class="sec-label"><div class="sec-num">1</div> Basic Details</div>
+    <div class="sec-title">Tell us about the birthday person</div>
+    <div class="sec-hint">We'll personalise every single detail for them</div>
+
+    <div class="input-group">
+      <label>Their Name *</label>
+      <input type="text" id="inp-name" placeholder="e.g. Priya" maxlength="25"/>
+      <span class="error-msg" id="err-name">Please enter a name</span>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Birthday Day *</label>
+        <input type="number" id="inp-day" placeholder="e.g. 19" min="1" max="31"/>
+        <span class="error-msg" id="err-day">Enter day (1–31)</span>
+      </div>
+      <div class="input-group">
+        <label>Birthday Month *</label>
+        <select id="inp-month">
+          <option value="">Select month</option>
+          <option value="1">January</option><option value="2">February</option>
+          <option value="3">March</option><option value="4">April</option>
+          <option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option>
+          <option value="9">September</option><option value="10">October</option>
+          <option value="11">November</option><option value="12">December</option>
+        </select>
+        <span class="error-msg" id="err-month">Please select a month</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Your Relationship to Them</label>
+      <select id="inp-relation">
+        <option value="">Select...</option>
+        <option value="Best Friend">Best Friend 👫</option>
+        <option value="Partner / Lover">Partner / Lover 💕</option>
+        <option value="Sibling">Sibling 👧</option>
+        <option value="Parent">Parent 👨‍👩</option>
+        <option value="Colleague / Friend">Colleague / Friend 🤝</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 2: VIBE -->
+  <div class="section-wrap">
+    <div class="sec-label"><div class="sec-num">2</div> Choose a Vibe</div>
+    <div class="sec-title">What feeling should the website give?</div>
+    <div class="sec-hint">This sets the whole mood — animations, tone, energy</div>
+
+    <div class="vibe-cards" id="vibeCards">
+      <div class="vibe-card" onclick="selectVibe('Romantic & Dreamy 💕')" id="vibe-0">
+        <div class="vibe-icon">💕</div>
+        <div class="vibe-info"><div class="vibe-name">Romantic & Dreamy</div><div class="vibe-desc">Soft, warm, heart-felt</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectVibe('Magical & Mystical ✨')" id="vibe-1">
+        <div class="vibe-icon">✨</div>
+        <div class="vibe-info"><div class="vibe-name">Magical & Mystical</div><div class="vibe-desc">Spells, stars, wonder</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectVibe('Bold & Celebratory 🎉')" id="vibe-2">
+        <div class="vibe-icon">🎉</div>
+        <div class="vibe-info"><div class="vibe-name">Bold & Celebratory</div><div class="vibe-desc">Loud, colourful, festive</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectVibe('Calm & Elegant 🌿')" id="vibe-3">
+        <div class="vibe-icon">🌿</div>
+        <div class="vibe-info"><div class="vibe-name">Calm & Elegant</div><div class="vibe-desc">Minimal, refined, classy</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectVibe('Nostalgic & Vintage 📜')" id="vibe-4">
+        <div class="vibe-icon">📜</div>
+        <div class="vibe-info"><div class="vibe-name">Nostalgic & Vintage</div><div class="vibe-desc">Old world, rustic, warm</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectVibe('Cosmic & Futuristic 🚀')" id="vibe-5">
+        <div class="vibe-icon">🚀</div>
+        <div class="vibe-info"><div class="vibe-name">Cosmic & Futuristic</div><div class="vibe-desc">Space, neon, sci-fi</div></div>
+        <div class="vibe-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 3: COLOR PALETTE -->
+  <div class="section-wrap">
+    <div class="sec-label"><div class="sec-num">3</div> Choose a Colour Palette</div>
+    <div class="sec-title">What colours feel right?</div>
+    <div class="sec-hint">This gives us the exact color direction for your custom design</div>
+
+    <div class="vibe-cards" id="paletteCards">
+      <div class="vibe-card" onclick="selectPalette('Pink & Purple 🌸')" id="pal-0">
+        <div class="vibe-icon" style="background:linear-gradient(135deg,#ff6b9d,#c77dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;font-weight:700;">Aa</div>
+        <div class="vibe-info"><div class="vibe-name">Pink & Purple</div><div class="vibe-desc">Dreamy · Romantic · Soft</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectPalette('Blue & Silver 💙')" id="pal-1">
+        <div class="vibe-icon" style="background:linear-gradient(135deg,#4db8ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;font-weight:700;">Aa</div>
+        <div class="vibe-info"><div class="vibe-name">Blue & Silver</div><div class="vibe-desc">Cool · Elegant · Calm</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectPalette('Green & Gold 💚')" id="pal-2">
+        <div class="vibe-icon" style="background:linear-gradient(135deg,#44cc88,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;font-weight:700;">Aa</div>
+        <div class="vibe-info"><div class="vibe-name">Green & Gold</div><div class="vibe-desc">Nature · Luxury · Fresh</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectPalette('Red & Black 🔴')" id="pal-3">
+        <div class="vibe-icon" style="background:linear-gradient(135deg,#ff4455,#880011);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;font-weight:700;">Aa</div>
+        <div class="vibe-info"><div class="vibe-name">Red & Black</div><div class="vibe-desc">Bold · Intense · Dramatic</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectPalette('Orange & Cream 🧡')" id="pal-4">
+        <div class="vibe-icon" style="background:linear-gradient(135deg,#ff8833,#f5e6cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;font-weight:700;">Aa</div>
+        <div class="vibe-info"><div class="vibe-name">Orange & Cream</div><div class="vibe-desc">Warm · Playful · Sunny</div></div>
+        <div class="vibe-check"></div>
+      </div>
+      <div class="vibe-card" onclick="selectPalette('Deep Purple & Midnight 💜')" id="pal-5">
+        <div class="vibe-icon" style="background:linear-gradient(135deg,#8833ff,#1a0033);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;font-weight:700;">Aa</div>
+        <div class="vibe-info"><div class="vibe-name">Deep Purple & Midnight</div><div class="vibe-desc">Mystical · Dark · Rich</div></div>
+        <div class="vibe-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 4: SUGGESTIONS -->
+  <div class="section-wrap">
+    <div class="sec-label"><div class="sec-num">4</div> Pick Your Features</div>
+    <div class="sec-title">What should be inside the website?</div>
+
+    <div class="suggestions-intro">
+      <div class="si-title">💡 Our Suggestions</div>
+      <div class="si-text">Pick as many as you like! ✨<br>
+        <span style="color:var(--gold);">First 5 features included in ₹299</span> — every extra feature adds just <span style="color:var(--gold);">₹30</span> more. Price updates live as you pick!</div>
+    </div>
+
+    <div class="suggestions-grid" id="suggestionsGrid">
+
+      <!-- Interactive -->
+      <div class="sug-card" data-name="Floating Hearts to Collect 💗" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">💗</span>
+        <div class="sug-name">Floating Hearts</div>
+        <div class="sug-desc">Tap to collect all the hearts floating around the screen</div>
+        <span class="sug-popular">⭐ Popular</span>
+      </div>
+
+      <div class="sug-card" data-name="Secret Code to Unlock Letter 🔐" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🔐</span>
+        <div class="sug-name">Secret Code Lock</div>
+        <div class="sug-desc">They enter a 4-digit code you whisper to unlock the letter</div>
+        <span class="sug-popular">⭐ Popular</span>
+      </div>
+
+      <div class="sug-card" data-name="Typewriter Poem Revealed Line by Line 🎬" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🎬</span>
+        <div class="sug-name">Typewriter Poem</div>
+        <div class="sug-desc">A poem appears line by line with a typewriter effect</div>
+      </div>
+
+      <div class="sug-card" data-name="Fireworks on Birthday 🎆" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🎆</span>
+        <div class="sug-name">Fireworks</div>
+        <div class="sug-desc">Fireworks burst across the screen when the birthday arrives</div>
+      </div>
+
+      <div class="sug-card" data-name="Tap to Pop Balloons 🎈" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🎈</span>
+        <div class="sug-name">Pop Balloons</div>
+        <div class="sug-desc">Tap each balloon to pop it and reveal a sweet message</div>
+      </div>
+
+      <div class="sug-card" data-name="Wish Jar with Rotating Wishes 🫙" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🫙</span>
+        <div class="sug-name">Wish Jar</div>
+        <div class="sug-desc">A glowing jar of wishes — tap to reveal them one by one</div>
+      </div>
+
+      <div class="sug-card" data-name="Virtual Cake to Cut 🎂" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🎂</span>
+        <div class="sug-name">Virtual Cake</div>
+        <div class="sug-desc">Blow out candles and cut the cake — with sound!</div>
+        <span class="sug-popular">⭐ Popular</span>
+      </div>
+
+      <div class="sug-card" data-name="Flip Cards with Messages 🃏" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🃏</span>
+        <div class="sug-name">Flip Cards</div>
+        <div class="sug-desc">Cards that flip to reveal personal messages when tapped</div>
+      </div>
+
+      <div class="sug-card" data-name="Midnight Surprise Message 🌙" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🌙</span>
+        <div class="sug-name">Midnight Message</div>
+        <div class="sug-desc">A special message appears only at midnight on their birthday</div>
+      </div>
+
+      <div class="sug-card" data-name="Shooting Stars to Tap ⭐" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">⭐</span>
+        <div class="sug-name">Shooting Stars</div>
+        <div class="sug-desc">Tap shooting stars and get a birthday wish each time</div>
+      </div>
+
+      <div class="sug-card" data-name="Star Rating Section ⭐" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🌟</span>
+        <div class="sug-name">Star Rating</div>
+        <div class="sug-desc">They rate how amazing their birthday feels — with fun responses</div>
+      </div>
+
+      <div class="sug-card" data-name="Gift Box with Surprise Messages 🎁" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🎁</span>
+        <div class="sug-name">Gift Box</div>
+        <div class="sug-desc">A gift box that reveals a new surprise message every tap</div>
+      </div>
+
+      <div class="sug-card" data-name="Countdown Timer ⏳" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">⏳</span>
+        <div class="sug-name">Countdown Timer</div>
+        <div class="sug-desc">A beautiful timer counting down to their birthday</div>
+        <span class="sug-popular">⭐ Popular</span>
+      </div>
+
+      <div class="sug-card" data-name="Butterfly Animations 🦋" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🦋</span>
+        <div class="sug-name">Butterflies</div>
+        <div class="sug-desc">Butterflies gracefully fly across the screen throughout</div>
+      </div>
+
+      <div class="sug-card" data-name="Name Spelt in Falling Petals 🌸" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">🌸</span>
+        <div class="sug-name">Petal Name Spelling</div>
+        <div class="sug-desc">Their name appears letter by letter falling from above</div>
+      </div>
+
+      <div class="sug-card" data-name="Interactive Story Mode 📖" onclick="toggleSug(this)">
+        <div class="sug-badge">✓</div>
+        <span class="sug-emoji">📖</span>
+        <div class="sug-name">Story Mode</div>
+        <div class="sug-desc">A story about them told page by page like a book</div>
+      </div>
+
+    </div>
+    <p class="picked-count" id="pickedCount">0 / 5 free features selected ✨</p>
+    <div class="price-breakdown" id="priceBreakdown" style="display:none;"></div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 5: LETTER -->
+  <div class="section-wrap">
+    <div class="sec-label"><div class="sec-num">5</div> Your Message</div>
+    <div class="sec-title">Write your letter from the heart 💌</div>
+    <div class="sec-hint">This goes inside the secret letter section of the website</div>
+    <div class="input-group">
+      <label>Your heartfelt message *</label>
+      <textarea id="inp-letter" placeholder="Write whatever you feel...&#10;&#10;e.g. Happy Birthday! You mean everything to me and I'm so lucky to have you in my life. 💕"></textarea>
+      <span class="error-msg" id="err-letter">Please write your message</span>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 6: EXTRA NOTES -->
+  <div class="section-wrap">
+    <div class="sec-label"><div class="sec-num">6</div> Anything Else?</div>
+    <div class="sec-title">Tell us anything extra you want 💬</div>
+    <div class="sec-hint">Specific colors, a theme idea, a favorite thing of theirs, a surprise — anything at all!</div>
+    <textarea class="notes-box" id="inp-notes" placeholder="e.g. She loves sunflowers and the color yellow. I want the whole website to feel warm and sunny. Maybe add something about our friendship of 5 years..."></textarea>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="submit-btn" onclick="submitOrder()">👑 Place My Custom Order</button>
+
+</div>
+
+<div class="footer">
+  <div class="footer-name">WishCraft ✨</div>
+  <div class="footer-sub">Custom · Made with love · @digitalwishes.in</div>
+</div>
+
+<!-- STICKY PRICE BAR -->
+<div class="sticky-price" id="stickyPrice">
+  <div class="sp-left">
+    <div class="sp-total" id="spTotal">₹299</div>
+    <div class="sp-breakdown" id="spBreakdown">5 features included · pick more below</div>
+  </div>
+  <button class="sp-btn" onclick="submitOrder()">👑 Order Now</button>
+</div>
+<div class="order-modal" id="orderModal">
+  <div class="order-modal-box">
+    <div class="om-handle"></div>
+    <div class="om-title">Your Custom Order 👑</div>
+    <div class="om-sub">Screenshot this or copy it and send to us on Instagram!</div>
+    <div class="summary-box" id="summaryBox"></div>
+    <div class="pay-section">
+      <div class="pay-title">How to complete your order</div>
+      <div class="pay-step"><div class="ps-n">1</div><div class="ps-t">Screenshot or copy the order summary above 📸</div></div>
+      <div class="pay-step"><div class="ps-n">2</div><div class="ps-t">Pay <strong>₹299</strong> via UPI below</div></div>
+      <div class="upi-copy" onclick="copyUPI()" id="upiBox">
+        <span id="upiText">wishcraft@upi</span>
+        <span class="upi-hint">Tap to copy 📋</span>
+      </div>
+      <div class="pay-step" style="margin-top:12px;"><div class="ps-n">3</div><div class="ps-t">DM us on Instagram with payment screenshot + order summary. We'll reply within <strong>2 hours</strong> and start building! 🚀</div></div>
+      <a class="insta-btn" href="https://instagram.com/digitalwishes.in" target="_blank">
+        <span style="font-size:1.5rem;">📸</span>
+        <div><div class="insta-handle">@digitalwishes.in</div><div class="insta-sub">Tap to open · We reply fast!</div></div>
+        <span style="color:var(--gold);margin-left:auto;">→</span>
+      </a>
+    </div>
+    <div class="om-actions">
+      <button class="copy-btn" onclick="copySummary()">📋 Copy Order Summary</button>
+      <button class="om-close-btn" onclick="document.getElementById('orderModal').classList.remove('show')">← Edit Details</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const UPI_ID = 'wishcraft@upi'; // ← Change to your UPI ID
+
+// ── STARS ──
+const starsEl=document.getElementById('stars');
+for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*1.5+0.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;`;starsEl.appendChild(s);}
+
+const MONTHS=['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// ── VIBE SELECT ──
+let selVibe = '';
+function selectVibe(name){
+  selVibe=name;
+  document.querySelectorAll('#vibeCards .vibe-card').forEach(c=>{
+    const matches=c.getAttribute('onclick').includes(name.split(' ')[0]);
+    c.classList.toggle('selected',matches);
+    c.querySelector('.vibe-check').textContent=matches?'✓':'';
+  });
+}
+
+// ── PALETTE SELECT ──
+let selPalette = '';
+function selectPalette(name){
+  selPalette=name;
+  document.querySelectorAll('#paletteCards .vibe-card').forEach(c=>{
+    const matches=c.getAttribute('onclick').includes(name.split(' ')[0]);
+    c.classList.toggle('selected',matches);
+    c.querySelector('.vibe-check').textContent=matches?'✓':'';
+  });
+}
+
+const BASE_PRICE = 299;
+const FREE_FEATURES = 5;
+const EXTRA_PRICE = 30;
+
+// ── SUGGESTION TOGGLE ──
+let pickedFeatures=[];
+function toggleSug(card){
+  const name=card.dataset.name;
+  card.classList.toggle('picked');
+  if(card.classList.contains('picked')){
+    if(!pickedFeatures.includes(name)) pickedFeatures.push(name);
+  } else {
+    pickedFeatures=pickedFeatures.filter(f=>f!==name);
+  }
+  updatePrice();
+}
+
+function updatePrice(){
+  const count=pickedFeatures.length;
+  const extras=Math.max(0,count-FREE_FEATURES);
+  const total=BASE_PRICE+(extras*EXTRA_PRICE);
+
+  // Update picked count text
+  const freeLeft=Math.max(0,FREE_FEATURES-count);
+  if(count===0){
+    document.getElementById('pickedCount').textContent=`0 / ${FREE_FEATURES} free features selected ✨`;
+  } else if(count<=FREE_FEATURES){
+    document.getElementById('pickedCount').textContent=`${count} selected · ${freeLeft} more free slot${freeLeft!==1?'s':''} remaining ✨`;
+  } else {
+    document.getElementById('pickedCount').textContent=`${count} features selected · ${extras} extra feature${extras!==1?'s':''} (+ ₹${extras*EXTRA_PRICE}) ✨`;
+  }
+
+  // Mark extra cards with +₹30 badge
+  document.querySelectorAll('.sug-card.picked').forEach((card,i)=>{
+    card.classList.toggle('extra-feature',i>=FREE_FEATURES);
+  });
+
+  // Update price breakdown
+  const bd=document.getElementById('priceBreakdown');
+  if(count>0){
+    bd.style.display='block';
+    bd.innerHTML=`
+      <strong>₹${BASE_PRICE}</strong> base (includes ${FREE_FEATURES} features)
+      ${extras>0?`<br><strong>+ ₹${extras*EXTRA_PRICE}</strong> for ${extras} extra feature${extras!==1?'s':''} (₹${EXTRA_PRICE} each)`:''}
+      <br><strong style="color:var(--gold);font-size:1rem;">Total: ₹${total}</strong>
+    `;
+  } else {
+    bd.style.display='none';
+  }
+
+  // Update sticky bar
+  document.getElementById('spTotal').textContent=`₹${total}`;
+  document.getElementById('spBreakdown').textContent=
+    count===0
+      ? `${FREE_FEATURES} features included · pick below`
+      : extras>0
+        ? `₹299 base + ₹${extras*EXTRA_PRICE} (${extras} extra)`
+        : `${count} of ${FREE_FEATURES} free features picked`;
+}
+
+// ── VALIDATE ──
+function validate(){
+  let ok=true;
+  const set=(id,errId,cond)=>{
+    document.getElementById(id).classList.toggle('input-error',!cond);
+    document.getElementById(errId).style.display=cond?'none':'block';
+    if(!cond)ok=false;
+  };
+  set('inp-name','err-name',document.getElementById('inp-name').value.trim().length>0);
+  const day=parseInt(document.getElementById('inp-day').value);
+  set('inp-day','err-day',day>=1&&day<=31);
+  set('inp-month','err-month',document.getElementById('inp-month').value!=='');
+  set('inp-letter','err-letter',document.getElementById('inp-letter').value.trim().length>0);
+  if(!ok) document.querySelector('.input-error')?.scrollIntoView({behavior:'smooth',block:'center'});
+  return ok;
+}
+
+// ── SUBMIT ──
+function submitOrder(){
+  if(!validate())return;
+  const name=document.getElementById('inp-name').value.trim();
+  const day=document.getElementById('inp-day').value;
+  const month=document.getElementById('inp-month').value;
+  const relation=document.getElementById('inp-relation').value||'Not specified';
+  const letter=document.getElementById('inp-letter').value.trim();
+  const notes=document.getElementById('inp-notes').value.trim()||'None';
+  const featuresText=pickedFeatures.length>0?pickedFeatures.map((f,i)=>`  ${i+1}. ${f}`).join('\n'):'  None selected';
+
+  const count=pickedFeatures.length;
+  const extras=Math.max(0,count-FREE_FEATURES);
+  const total=BASE_PRICE+(extras*EXTRA_PRICE);
+  const priceBreakdown=extras>0
+    ? `₹${BASE_PRICE} base + ₹${extras*EXTRA_PRICE} (${extras} extra feature${extras!==1?'s':''})`
+    : `₹${BASE_PRICE} (${count} feature${count!==1?'s':''} included)`;
+
+  const summary=
+`━━━━━━━━━━━━━━━━━━━━
+👑 WISHCRAFT CUSTOM ORDER
+━━━━━━━━━━━━━━━━━━━━
+👤 Name: ${name}
+🗓️ Birthday: ${day} ${MONTHS[parseInt(month)]}
+💞 Relation: ${relation}
+🎨 Vibe: ${selVibe||'Not specified'}
+🎨 Colours: ${selPalette||'Not specified'}
+📦 Package: Custom
+━━━━━━━━━━━━━━━━━━━━
+✨ Features Requested (${count}):
+${featuresText}
+━━━━━━━━━━━━━━━━━━━━
+💌 Letter Preview:
+${letter.substring(0,200)}${letter.length>200?'...':''}
+━━━━━━━━━━━━━━━━━━━━
+📝 Extra Notes:
+${notes.substring(0,300)}${notes.length>300?'...':''}
+━━━━━━━━━━━━━━━━━━━━
+💰 Price: ${priceBreakdown}
+💰 Total: ₹${total}`;
+
+  document.getElementById('summaryBox').textContent=summary;
+  document.getElementById('upiText').textContent=UPI_ID;
+  // Update pay step to show correct amount
+  document.querySelector('.ps-t strong').textContent=`₹${total}`;
+  document.getElementById('orderModal').classList.add('show');
+}
+
+// ── COPY ──
+function copyUPI(){
+  copyToClipboard(UPI_ID, '📋 UPI ID copied!');
+}
+function copySummary(){
+  copyToClipboard(document.getElementById('summaryBox').textContent, '📋 Order summary copied!');
+}
+function copyToClipboard(text, msg){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>showToast(msg)).catch(()=>fallbackCopy(text,msg));
+  } else {
+    fallbackCopy(text, msg);
+  }
+}
+function fallbackCopy(text, msg){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');showToast(msg);}catch(e){showToast('❌ Copy failed — please screenshot instead');}
+  document.body.removeChild(ta);
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+</script>
+</body>
+</html>

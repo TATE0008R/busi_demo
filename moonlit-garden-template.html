@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday!</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Cinzel:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<script>
+// ╔══════════════════════════════════════════════════════╗
+// ║           ✏️  EDIT ONLY THIS SECTION                 ║
+// ╠══════════════════════════════════════════════════════╣
+
+const NAME           = "Priya";
+const BIRTHDAY_DAY   = 25;
+const BIRTHDAY_MONTH = 6;
+const SECRET_CODE    = "2025";
+
+// MUSIC — pick one: "piano" | "rock" | "orchestral" | "jazz" | "lofi"
+window.MUSIC = "piano"; const MUSIC = window.MUSIC;
+
+// COLOR THEME — pick one:
+// "lavender" → Lavender & Moonwhite (default)
+// "rose"     → Rose & Blush
+// "teal"     → Teal & Sage
+// "gold"     → Gold & Ivory
+const THEME = "lavender";
+
+// FLOWER MESSAGES — shown when flowers bloom (5 flowers)
+const FLOWER_MESSAGES = [
+  `🌸 "In the moonlit garden of life, you are the rarest bloom."`,
+  `🌷 "Your kindness is like moonlight — it softens everything it touches."`,
+  `🌼 "You make the world more beautiful just by being in it."`,
+  `🌺 "The garden blooms brightest on the night you were born."`,
+  `✨ "Tonight the moon shines just for you, ${NAME}."`,
+];
+
+// LETTER (unlocked by secret code)
+const LETTER = `🌙 Dear ${NAME},
+
+In a garden lit only by moonlight,
+some flowers bloom quietly —
+not asking to be seen,
+just offering their beauty to the night.
+
+You are one of those flowers.
+
+The kind of person whose presence
+makes everything around them
+feel a little more peaceful,
+a little more whole.
+
+On this birthday, I hope you know
+how deeply you are noticed,
+how truly you are valued,
+how much the world needs exactly you.
+
+Happy Birthday, ${NAME}. 🌸
+May this be your most beautiful season yet.`;
+
+// ╚══════════════════════════════════════════════════════╝
+//   DO NOT EDIT ANYTHING BELOW THIS LINE
+// ╚══════════════════════════════════════════════════════╝
+
+const MOONLIT_THEMES = {
+  lavender:{ accent:'#c8b4ff', accent2:'#a090e0', bg:'#0d0b18', bg2:'#1a1435', firefly:'rgba(200,180,255,0.6)', letterBg:'linear-gradient(160deg,#f8f4ff,#f0ecf8)', letterText:'#2a1840', lineColor:'rgba(180,160,220,0.1)', moonColor:'radial-gradient(circle at 38% 38%,#fffbe8,#f0e8d0,#c8c0a8)', confetti1:'#c8b4ff', confetti2:'#f0d8ff' },
+  rose:    { accent:'#ff9ab0', accent2:'#e05070', bg:'#120810', bg2:'#2a1020', firefly:'rgba(255,154,176,0.6)', letterBg:'linear-gradient(160deg,#fff0f4,#ffe8ec)', letterText:'#3a1020', lineColor:'rgba(220,160,180,0.1)', moonColor:'radial-gradient(circle at 38% 38%,#fff0f0,#f0c8d0,#c8a0a8)', confetti1:'#ff9ab0', confetti2:'#ffd0dc' },
+  teal:    { accent:'#5dddc8', accent2:'#2aaa90', bg:'#071410', bg2:'#0f2420', firefly:'rgba(93,221,200,0.6)', letterBg:'linear-gradient(160deg,#f0fff8,#e8fff4)', letterText:'#0a2820', lineColor:'rgba(100,200,180,0.1)', moonColor:'radial-gradient(circle at 38% 38%,#f0fff8,#c8f0e8,#a0d8d0)', confetti1:'#5dddc8', confetti2:'#aaffee' },
+  gold:    { accent:'#d4af37', accent2:'#a07820', bg:'#100f05', bg2:'#201c08', firefly:'rgba(212,175,55,0.6)', letterBg:'linear-gradient(160deg,#fffbf0,#fff5e0)', letterText:'#2a1a00', lineColor:'rgba(200,160,50,0.1)', moonColor:'radial-gradient(circle at 38% 38%,#fffde8,#f0e0a0,#d0c080)', confetti1:'#d4af37', confetti2:'#f0d060' },
+};
+const T = MOONLIT_THEMES[THEME] || MOONLIT_THEMES.lavender;
+
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  if(!p.get('preview'))return;
+  if(p.get('name'))   window.NAME=p.get('name');
+  if(p.get('day'))    window.BIRTHDAY_DAY=parseInt(p.get('day'));
+  if(p.get('month'))  window.BIRTHDAY_MONTH=parseInt(p.get('month'));
+  if(p.get('code'))   window.SECRET_CODE=p.get('code');
+  if(p.get('music'))  window.MUSIC=p.get('music');
+  if(p.get('theme'))  Object.assign(T, MOONLIT_THEMES[p.get('theme')]||MOONLIT_THEMES.lavender);
+  if(p.get('letter')) window.LETTER=decodeURIComponent(p.get('letter'));
+})();
+
+document.title=`Happy Birthday ${NAME}! 🌙`;
+const themeStyle=document.createElement('style');
+themeStyle.textContent=`
+body{background:${T.bg};}
+.garden-bg{background:radial-gradient(ellipse 80% 50% at 50% 0%,${T.bg2} 0%,transparent 60%),radial-gradient(ellipse 100% 40% at 50% 100%,${T.bg2}88 0%,${T.bg} 50%),${T.bg};}
+.moon-glow{background:radial-gradient(circle,${T.accent}18 0%,${T.accent}08 40%,transparent 70%);}
+.moon-circle{background:${T.moonColor};}
+.moon-ring{border-color:${T.accent}18;}
+.firefly{background:${T.accent};box-shadow:0 0 8px 3px ${T.firefly};}
+.dot.active{background:${T.accent};box-shadow:0 0 8px ${T.accent}88;}
+.dot{border-color:${T.accent}44;}
+.scroll-down{color:${T.accent}44;}
+.garden-label,.garden-hint{color:${T.accent}44;}
+.garden-sub{color:${T.accent}55;}
+.petal-letter{color:${T.accent}!important;text-shadow:0 0 12px ${T.accent}88!important;}
+.phase-item.active{border-color:${T.accent};box-shadow:0 0 16px ${T.accent}22;}
+.phase-item.active .phase-name{color:${T.accent};}
+.phase-msg{border-color:${T.accent}12;}
+.owl{filter:drop-shadow(0 0 16px ${T.accent}22);}
+.cd-unit{border-color:${T.accent}12;}
+.cd-unit::before{background:linear-gradient(90deg,transparent,${T.accent}33,transparent);}
+.cd-val{color:${T.accent};text-shadow:0 0 20px ${T.accent}44;}
+.bd-msg{color:${T.accent};}
+.cd-btn.unlocked{background:linear-gradient(135deg,${T.accent2},${T.accent});color:#0d0b18;}
+.code-d{border-color:${T.accent}22;color:${T.accent};}
+.code-d:focus{border-color:${T.accent};box-shadow:0 0 14px ${T.accent}22;}
+.garden-letter{background:${T.letterBg};}
+.letter-text{color:${T.letterText};}
+.garden-letter::before{background:repeating-linear-gradient(transparent,transparent 27px,${T.lineColor} 28px);}
+.final-name{background:linear-gradient(135deg,${T.accent},${T.accent2},${T.accent});-webkit-background-clip:text;background-clip:text;}
+.wish-pop,.wish-popup{border-color:${T.accent}44;color:${T.accent};}
+#audioBtn{border-color:${T.accent}22;color:${T.accent};}
+.path-stone.lit{background:${T.accent}18;border-color:${T.accent}35;box-shadow:0 0 20px ${T.accent}25;}
+`;
+document.head.appendChild(themeStyle);
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#0d0b18;font-family:'Cormorant Garamond',serif;overflow-x:hidden;color:#e8e0f0;}
+
+/* ══ GARDEN BACKGROUND ══ */
+.garden-bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%,#1a1435 0%,transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%,#0f1a0f 0%,#0d0b18 50%),
+    #0d0b18;
+}
+/* Moon glow at top */
+.moon-glow{
+  position:fixed;top:-60px;left:50%;transform:translateX(-50%);
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(230,220,255,0.15) 0%,rgba(180,160,255,0.06) 40%,transparent 70%);
+  pointer-events:none;z-index:0;
+  animation:moonGlowPulse 5s ease-in-out infinite alternate;
+}
+@keyframes moonGlowPulse{from{opacity:0.7;}to{opacity:1;}}
+
+/* Lavender mist layers */
+.mist{
+  position:fixed;bottom:0;left:0;width:100%;
+  pointer-events:none;z-index:1;
+}
+.mist-layer{
+  position:absolute;bottom:0;left:0;width:200%;height:120px;
+  border-radius:50%;animation:mistDrift linear infinite;
+  opacity:0.07;
+}
+.m1{background:radial-gradient(ellipse 60% 100% at 30%,#c8b4ff,transparent);animation-duration:20s;}
+.m2{background:radial-gradient(ellipse 60% 100% at 70%,#d4c0ff,transparent);animation-duration:25s;animation-delay:5s;opacity:0.05;}
+@keyframes mistDrift{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* Stars */
+.stars-bg{position:fixed;top:0;left:0;width:100%;height:60%;pointer-events:none;z-index:1;}
+.star{position:absolute;border-radius:50%;background:white;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.05;}to{opacity:0.8;}}
+
+/* Fireflies */
+.firefly{
+  position:fixed;width:5px;height:5px;border-radius:50%;
+  background:#e8d8ff;pointer-events:none;z-index:3;
+  box-shadow:0 0 8px 3px rgba(200,180,255,0.6);
+  animation:ffMove var(--fd) ease-in-out infinite,ffBlink var(--fb) ease-in-out infinite;
+}
+@keyframes ffMove{0%{transform:translate(0,0);}25%{transform:translate(var(--fx1),var(--fy1));}50%{transform:translate(var(--fx2),var(--fy2));}75%{transform:translate(var(--fx1),0);}100%{transform:translate(0,0);}}
+@keyframes ffBlink{0%,100%{opacity:0.05;}50%{opacity:1;}}
+
+/* Falling petals */
+.petal-fall{
+  position:fixed;pointer-events:none;z-index:2;
+  animation:petalFall linear infinite;
+}
+@keyframes petalFall{
+  0%{transform:translateY(-30px) rotate(0deg) translateX(0);opacity:0;}
+  10%{opacity:0.7;}
+  90%{opacity:0.4;}
+  100%{transform:translateY(105vh) rotate(720deg) translateX(var(--pw));opacity:0;}
+}
+
+/* Garden path stones */
+.path-stone{
+  position:fixed;border-radius:50%;
+  background:rgba(200,180,255,0.06);
+  border:1px solid rgba(200,180,255,0.08);
+  pointer-events:none;z-index:2;
+  transition:background 0.8s,box-shadow 0.8s,border-color 0.8s;
+}
+.path-stone.lit{
+  background:rgba(200,180,255,0.18);
+  border-color:rgba(200,180,255,0.35);
+  box-shadow:0 0 20px rgba(200,180,255,0.25);
+}
+
+/* ══ SECTIONS ══ */
+.section{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;z-index:10;padding:60px 20px;
+  opacity:0;transition:opacity 0.8s ease;
+}
+.section.visible{opacity:1;}
+.section.locked-section{display:none;}
+
+/* Nav dots */
+.nav-dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:100;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(200,180,255,0.2);border:1px solid rgba(200,180,255,0.3);cursor:pointer;transition:all 0.3s;}
+.dot.active{background:#c8b4ff;transform:scale(1.5);box-shadow:0 0 8px rgba(200,180,255,0.5);}
+
+.scroll-down{font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,180,255,0.3);animation:bounce 2s ease-in-out infinite;margin-top:20px;font-family:'Cinzel',serif;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* Audio */
+#audioBtn{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(200,180,255,0.07);border:1px solid rgba(200,180,255,0.2);border-radius:50px;padding:8px 20px;font-size:0.75rem;color:#c8b4ff;z-index:999;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:0.08em;}
+
+/* Wish popup */
+.wish-pop{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(13,11,24,0.95);border:1px solid rgba(200,180,255,0.3);border-radius:20px;padding:12px 24px;font-style:italic;color:#c8b4ff;font-size:0.95rem;backdrop-filter:blur(12px);z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;font-family:'Cormorant Garamond',serif;}
+.wish-pop.show{transform:translateX(-50%) translateY(0);}
+
+/* Confetti */
+.cp{position:fixed;pointer-events:none;z-index:9998;animation:cpF linear forwards;}
+@keyframes cpF{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* ══ SEC 1 — LANDING ══ */
+#sec1{text-align:center;gap:22px;}
+.garden-label{font-family:'Cinzel',serif;font-size:clamp(0.7rem,2.5vw,0.9rem);letter-spacing:0.3em;text-transform:uppercase;color:rgba(200,180,255,0.4);}
+
+/* MOON */
+.moon-display{
+  position:relative;width:100px;height:100px;margin:0 auto;
+}
+.moon-circle{
+  width:100px;height:100px;border-radius:50%;
+  background:radial-gradient(circle at 38% 38%,#fffbe8,#f0e8d0,#c8c0a8);
+  box-shadow:0 0 30px rgba(240,230,200,0.4),0 0 60px rgba(200,180,255,0.15);
+  animation:moonFloat 5s ease-in-out infinite alternate;
+  position:relative;overflow:hidden;
+}
+@keyframes moonFloat{from{transform:translateY(0);}to{transform:translateY(-10px);}}
+.moon-crater{position:absolute;border-radius:50%;background:rgba(180,170,150,0.2);}
+.moon-ring{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:130px;height:130px;border-radius:50%;
+  border:1px solid rgba(200,180,255,0.15);
+  animation:ringPulse 3s ease-in-out infinite alternate;
+}
+.moon-ring2{width:160px;height:160px;border-color:rgba(200,180,255,0.08);animation-delay:1s;}
+@keyframes ringPulse{from{opacity:0.3;}to{opacity:0.8;}}
+
+/* PETAL NAME */
+#petalNameWrap{position:relative;height:80px;width:min(500px,90vw);display:flex;align-items:center;justify-content:center;overflow:visible;}
+.petal-letter{
+  position:absolute;font-family:'Cinzel',serif;
+  font-size:clamp(1.4rem,4.5vw,2.2rem);
+  pointer-events:none;
+  animation:petalDrop var(--pd) cubic-bezier(0.34,1.56,0.64,1) var(--pdelay) both;
+}
+@keyframes petalDrop{
+  0%{opacity:0;transform:translateY(-100px) rotate(var(--prot)) scale(0.3);}
+  70%{opacity:1;transform:translateY(5px) rotate(2deg) scale(1.05);}
+  100%{opacity:1;transform:translateY(0) rotate(0deg) scale(1);}
+}
+
+.garden-sub{font-size:clamp(0.85rem,3vw,1.1rem);color:rgba(220,210,240,0.5);font-style:italic;}
+.garden-hint{font-size:0.78rem;color:rgba(200,180,255,0.3);letter-spacing:0.06em;}
+
+/* ══ SEC 2 — MOON PHASES ══ */
+#sec2{gap:28px;text-align:center;}
+#sec2 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,180,255,0.5);}
+.moon-phases{display:flex;gap:clamp(8px,3vw,20px);justify-content:center;flex-wrap:wrap;}
+.phase-item{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;padding:14px 10px;
+  background:rgba(200,180,255,0.04);border:1px solid rgba(200,180,255,0.08);
+  border-radius:16px;transition:all 0.3s;min-width:70px;
+}
+.phase-item:hover{background:rgba(200,180,255,0.1);border-color:rgba(200,180,255,0.2);}
+.phase-item.active{background:rgba(200,180,255,0.12);border-color:rgba(200,180,255,0.35);box-shadow:0 0 16px rgba(200,180,255,0.15);}
+.phase-moon{font-size:clamp(1.8rem,5vw,2.5rem);transition:transform 0.3s;}
+.phase-item.active .phase-moon{transform:scale(1.2);filter:drop-shadow(0 0 8px rgba(200,180,255,0.5));}
+.phase-name{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(200,180,255,0.4);}
+.phase-item.active .phase-name{color:#c8b4ff;}
+.phase-msg{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(0.95rem,3vw,1.15rem);
+  color:rgba(220,210,240,0.8);max-width:360px;line-height:1.7;text-align:center;
+  min-height:70px;display:flex;align-items:center;justify-content:center;
+  background:rgba(200,180,255,0.04);border:1px solid rgba(200,180,255,0.08);
+  border-radius:16px;padding:16px 20px;opacity:0;transition:opacity 0.5s;
+}
+.phase-msg.show{opacity:1;}
+
+/* ══ SEC 3 — OWL ══ */
+#sec3{gap:24px;text-align:center;}
+#sec3 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,180,255,0.5);}
+.owl-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.owl{
+  font-size:clamp(80px,22vw,120px);
+  animation:owlPerch 4s ease-in-out infinite alternate;
+  cursor:pointer;user-select:none;line-height:1;
+  filter:drop-shadow(0 0 16px rgba(200,180,255,0.2));
+  transition:transform 0.1s;
+  display:block;
+}
+@keyframes owlPerch{
+  from{transform:translateY(0) rotate(-3deg);}
+  to{transform:translateY(-8px) rotate(3deg);}
+}
+.owl:active{transform:scale(0.9) rotate(-10deg)!important;}
+.owl-msg{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(0.95rem,3vw,1.15rem);color:rgba(220,210,240,0.8);
+  max-width:340px;line-height:1.7;text-align:center;
+  min-height:60px;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.5s;
+}
+.owl-msg.show{opacity:1;}
+.owl-hint{font-size:0.78rem;color:rgba(200,180,255,0.3);letter-spacing:0.1em;text-transform:uppercase;font-family:'Cinzel',serif;}
+.owl-count{font-family:'Cinzel',serif;font-size:0.78rem;color:rgba(200,180,255,0.3);letter-spacing:0.1em;}
+
+/* ══ SEC 4 — COUNTDOWN + GARDEN PATH ══ */
+#sec4{gap:28px;text-align:center;}
+#sec4 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,180,255,0.5);}
+.cd-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.cd-unit{
+  background:rgba(200,180,255,0.04);border:1px solid rgba(200,180,255,0.1);
+  border-radius:14px;padding:16px 18px;min-width:78px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cd-unit::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,180,255,0.3),transparent);}
+.cd-val{font-family:'Cinzel',serif;font-size:clamp(1.8rem,6vw,2.8rem);color:#c8b4ff;line-height:1;font-weight:600;text-shadow:0 0 20px rgba(200,180,255,0.4);}
+.cd-label{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,180,255,0.35);margin-top:6px;font-family:'Cinzel',serif;}
+.bd-msg{display:none;font-family:'Dancing Script',cursive;font-size:1.3rem;color:#c8b4ff;text-align:center;}
+.bd-msg.show{display:block;}
+.cd-btn{padding:13px 38px;border-radius:50px;font-family:'Cinzel',serif;font-size:0.88rem;letter-spacing:0.1em;cursor:not-allowed;border:none;transition:all 0.2s;margin-top:4px;}
+.cd-btn.locked{background:rgba(200,180,255,0.04);color:rgba(200,180,255,0.2);border:1px solid rgba(200,180,255,0.1);}
+.cd-btn.unlocked{background:linear-gradient(135deg,#3d2a6e,#c8b4ff);color:#0d0b18;cursor:pointer;font-weight:600;box-shadow:0 4px 20px rgba(200,180,255,0.3);}
+.cd-lock{font-size:0.75rem;color:rgba(200,180,255,0.22);letter-spacing:0.08em;font-family:'Cinzel',serif;}
+.cd-lock.hidden{opacity:0;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.shake{animation:shake 0.3s ease;}
+
+/* ══ SEC 5 — SECRET CODE ══ */
+#sec5{gap:24px;text-align:center;}
+#sec5 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,180,255,0.5);}
+.code-hint-g{font-size:0.9rem;color:rgba(220,210,240,0.4);font-style:italic;max-width:300px;line-height:1.6;text-align:center;}
+.code-inputs{display:flex;gap:10px;justify-content:center;}
+.code-d{width:56px;height:64px;background:rgba(200,180,255,0.05);border:1.5px solid rgba(200,180,255,0.2);border-radius:12px;font-family:'Cinzel',serif;font-size:1.8rem;color:#c8b4ff;text-align:center;outline:none;transition:border 0.2s,box-shadow 0.2s;}
+.code-d:focus{border-color:#c8b4ff;box-shadow:0 0 14px rgba(200,180,255,0.2);}
+.code-d.wrong{border-color:#ff6688;animation:shake 0.3s ease;}
+.code-d.correct{border-color:#88ffcc;}
+.code-status{font-size:0.82rem;min-height:22px;font-style:italic;color:rgba(220,210,240,0.4);}
+
+/* ══ SEC 6 — GARDEN LETTER ══ */
+#sec6{gap:24px;text-align:center;}
+#sec6 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,180,255,0.5);}
+.garden-letter{
+  background:linear-gradient(160deg,#f8f4ff,#f0ecf8);
+  border-radius:12px;padding:26px 22px;max-width:400px;width:100%;
+  text-align:left;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(200,180,255,0.1);
+}
+.garden-letter::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(transparent,transparent 27px,rgba(180,160,220,0.1) 28px);pointer-events:none;}
+.letter-text{font-family:'Dancing Script',cursive;font-size:clamp(0.92rem,2.5vw,1.1rem);color:#2a1840;line-height:2;white-space:pre-line;position:relative;z-index:1;}
+.letter-hint{font-size:0.75rem;color:rgba(200,180,255,0.3);letter-spacing:0.12em;text-transform:uppercase;animation:glowPulse 2s ease-in-out infinite;font-family:'Cinzel',serif;}
+@keyframes glowPulse{0%,100%{opacity:0.3;}50%{opacity:0.8;}}
+
+/* ══ SEC 7 — FINAL ══ */
+#sec7{gap:24px;text-align:center;background:radial-gradient(ellipse 80% 70% at 50% 50%,rgba(200,180,255,0.06) 0%,transparent 70%);}
+.final-name{
+  font-family:'Cinzel',serif;font-size:clamp(2.8rem,11vw,5.5rem);font-weight:600;
+  background:linear-gradient(135deg,#c8b4ff,#f0e8ff,#a090e0,#c8b4ff);
+  background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:nameShimmer 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(200,180,255,0.3));
+  letter-spacing:0.08em;
+}
+@keyframes nameShimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.final-msg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,3.5vw,1.4rem);color:rgba(220,210,240,0.65);max-width:480px;line-height:1.8;}
+.final-sub{font-size:0.75rem;color:rgba(200,180,255,0.22);letter-spacing:0.18em;text-transform:uppercase;font-family:'Cinzel',serif;}
+.replay-btn{padding:11px 32px;background:rgba(200,180,255,0.07);color:#c8b4ff;border:1px solid rgba(200,180,255,0.2);border-radius:50px;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;}
+.final-icons{font-size:2rem;animation:hp 4s ease-in-out infinite alternate;}
+@keyframes hp{from{transform:scale(1);}to{transform:scale(1.06);}}
+
+</style>
+
+<div class="garden-bg"></div>
+<div class="moon-glow"></div>
+<div class="mist"><div class="mist-layer m1"></div><div class="mist-layer m2"></div></div>
+<div class="stars-bg" id="starsEl"></div>
+<div class="nav-dots" id="navDots"></div>
+<button id="audioBtn">🎵 Play moonlit music</button>
+<div class="wish-pop" id="wishPop"></div>
+
+<!-- PATH STONES (decorative, lit by scroll) -->
+<div id="pathStones"></div>
+
+<!-- SEC 1: LANDING -->
+<section class="section" id="sec1">
+  <div class="garden-label">🌙 A moonlit garden blooms for</div>
+  <div class="moon-display">
+    <div class="moon-ring"></div>
+    <div class="moon-ring moon-ring2"></div>
+    <div class="moon-circle" id="mainMoon">
+      <div class="moon-crater" style="width:12px;height:12px;top:25%;left:30%;"></div>
+      <div class="moon-crater" style="width:8px;height:8px;top:55%;left:55%;"></div>
+      <div class="moon-crater" style="width:6px;height:6px;top:35%;left:60%;"></div>
+    </div>
+  </div>
+  <div id="petalNameWrap"></div>
+  <div class="garden-sub">Tonight the garden blooms just for you 🌸</div>
+  <div class="garden-hint">🌠 Tap shooting stars · 🦉 Find the owl · Scroll to explore</div>
+  <div class="scroll-down">INTO THE GARDEN ↓</div>
+</section>
+
+<!-- SEC 2: COUNTDOWN -->
+<section class="section" id="sec2">
+  <h2>🌸 BIRTHDAY MOONRISE COUNTDOWN</h2>
+  <div class="cd-row" id="cdRow">
+    <div class="cd-unit"><div class="cd-val" id="cdD">--</div><div class="cd-label">Days</div></div>
+    <div class="cd-unit"><div class="cd-val" id="cdH">--</div><div class="cd-label">Hours</div></div>
+    <div class="cd-unit"><div class="cd-val" id="cdM">--</div><div class="cd-label">Mins</div></div>
+    <div class="cd-unit"><div class="cd-val" id="cdS">--</div><div class="cd-label">Secs</div></div>
+  </div>
+  <div class="bd-msg" id="bdMsg">🌕 The moon is full — it's your birthday! 🌸</div>
+  <button class="cd-btn locked" id="cdBtn">Enter the Garden →</button>
+  <span class="cd-lock" id="cdLock">🔒 Gate opens on your birthday</span>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 3: MOON PHASES -->
+<section class="section" id="sec3">
+  <h2>🌙 THE MOON PHASES</h2>
+  <p style="font-style:italic;font-size:0.9rem;color:rgba(200,180,255,0.4);margin-bottom:4px;">Tap each moon phase for a message</p>
+  <div class="moon-phases" id="moonPhases">
+    <div class="phase-item" data-phase="0"><div class="phase-moon">🌑</div><div class="phase-name">New</div></div>
+    <div class="phase-item" data-phase="1"><div class="phase-moon">🌒</div><div class="phase-name">Waxing</div></div>
+    <div class="phase-item" data-phase="2"><div class="phase-moon">🌓</div><div class="phase-name">Quarter</div></div>
+    <div class="phase-item" data-phase="3"><div class="phase-moon">🌔</div><div class="phase-name">Gibbous</div></div>
+    <div class="phase-item" data-phase="4"><div class="phase-moon">🌕</div><div class="phase-name">Full</div></div>
+    <div class="phase-item" data-phase="5"><div class="phase-moon">🌖</div><div class="phase-name">Waning</div></div>
+    <div class="phase-item" data-phase="6"><div class="phase-moon">🌗</div><div class="phase-name">Last</div></div>
+    <div class="phase-item" data-phase="7"><div class="phase-moon">🌘</div><div class="phase-name">Balsamic</div></div>
+  </div>
+  <div class="phase-msg" id="phaseMsg"></div>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 4: OWL -->
+<section class="section" id="sec4">
+  <h2>🦉 THE GARDEN OWL</h2>
+  <div class="owl-wrap">
+    <div class="owl" id="owlEl">🦉</div>
+    <p class="owl-hint">Tap the owl to hear its message 🌙</p>
+    <div class="owl-msg" id="owlMsg"></div>
+    <p class="owl-count" id="owlCount">0 / 5 hoots heard</p>
+  </div>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 5: SECRET CODE -->
+<section class="section" id="sec5">
+  <h2>🌿 THE GARDEN GATE</h2>
+  <p style="font-size:2rem;">🔐</p>
+  <p class="code-hint-g" id="codeHintEl"></p>
+  <div class="code-inputs">
+    <input class="code-d" maxlength="1" type="tel" id="d0"/>
+    <input class="code-d" maxlength="1" type="tel" id="d1"/>
+    <input class="code-d" maxlength="1" type="tel" id="d2"/>
+    <input class="code-d" maxlength="1" type="tel" id="d3"/>
+  </div>
+  <p class="code-status" id="codeStatus">ENTER THE GATE CODE 🌿</p>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 6: LETTER -->
+<section class="section" id="sec6">
+  <h2>💌 A LETTER FROM THE MOONLIT GARDEN</h2>
+  <div class="garden-letter" id="gardenLetter">
+    <div class="letter-text" id="letterEl"></div>
+  </div>
+  <p class="letter-hint" id="letterHint" style="display:none;">Tap to open 🌙</p>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 7: FINAL -->
+<section class="section" id="sec7">
+  <div class="final-icons">🌙 🌸 🌙</div>
+  <div class="final-name" id="finalName"></div>
+  <p class="final-msg" id="finalMsg"></p>
+  <p class="final-sub">✦ BLOOMED BY MOONLIGHT · MADE WITH LOVE ✦</p>
+  <button class="replay-btn" id="replayBtn">↺ Walk Through Again</button>
+</section>
+
+<script>
+// ── INJECT ──
+document.getElementById('finalName').textContent = NAME;
+document.getElementById('finalMsg').textContent = `May every night of this year be as beautiful as tonight, ${NAME}. Happy Birthday. 🌙`;
+document.getElementById('codeHintEl').textContent = `The garden gate opens only for those who know the secret, ${NAME}.\nEnter the moonlit code to find your letter.`;
+
+// ── STARS ──
+const starsEl=document.getElementById('starsEl');
+for(let i=0;i<160;i++){
+  const s=document.createElement('div');s.className='star';
+  const sz=Math.random()*2+0.3;
+  const lavender=Math.random()>0.65;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;background:${lavender?'#d4c8ff':'white'};--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;`;
+  starsEl.appendChild(s);
+}
+
+// ── FIREFLIES ──
+for(let i=0;i<28;i++){
+  const f=document.createElement('div');f.className='firefly';
+  f.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--fd:${(Math.random()*7+5).toFixed(1)}s;--fb:${(Math.random()*2+1.5).toFixed(1)}s;--fx1:${(Math.random()*60-30).toFixed(0)}px;--fy1:${(Math.random()*60-30).toFixed(0)}px;--fx2:${(Math.random()*60-30).toFixed(0)}px;--fy2:${(Math.random()*60-30).toFixed(0)}px;animation-delay:${(Math.random()*6).toFixed(1)}s;`;
+  document.body.appendChild(f);
+}
+
+// ── FALLING PETALS ──
+const petalEmojis=['🌸','🌺','✿','❀','🌷'];
+for(let i=0;i<20;i++){
+  const p=document.createElement('div');p.className='petal-fall';
+  p.textContent=petalEmojis[Math.floor(Math.random()*petalEmojis.length)];
+  p.style.cssText=`left:${Math.random()*100}%;font-size:${Math.random()*10+8}px;animation-duration:${(Math.random()*12+8).toFixed(1)}s;animation-delay:${(Math.random()*12).toFixed(1)}s;--pw:${(Math.random()*40-20).toFixed(0)}px;`;
+  document.body.appendChild(p);
+}
+
+// ── PETAL NAME ──
+(function(){
+  const letters=(NAME+' 🌸').split('');
+  const wrap=document.getElementById('petalNameWrap');
+  const colors=['#c8b4ff','#f0d8ff','#a090e0','#e0d0ff','#b8a4f0','#d4c8ff'];
+  const totalW=Math.min(window.innerWidth*0.85,460);
+  const spacing=totalW/(letters.length+1);
+  letters.forEach((ch,i)=>{
+    const el=document.createElement('span');el.className='petal-letter';el.textContent=ch;
+    const xPos=-totalW/2+spacing*(i+1);
+    el.style.cssText=`left:calc(50% + ${xPos}px);color:${colors[i%colors.length]};--pd:${0.5+i*0.09}s;--pdelay:${0.4+i*0.13}s;--prot:${(Math.random()*50-25).toFixed(0)}deg;text-shadow:0 0 12px ${colors[i%colors.length]}88;`;
+    wrap.appendChild(el);
+  });
+})();
+
+// ── GARDEN PATH STONES ──
+(function(){
+  const stonePositions=[
+    {left:'10%',bottom:'12%',size:40},{left:'20%',bottom:'18%',size:30},
+    {left:'32%',bottom:'10%',size:35},{left:'44%',bottom:'16%',size:28},
+    {left:'56%',bottom:'8%',size:38},{left:'68%',bottom:'14%',size:32},
+    {left:'78%',bottom:'10%',size:36},{left:'88%',bottom:'16%',size:30},
+  ];
+  stonePositions.forEach((sp,i)=>{
+    const stone=document.createElement('div');stone.className='path-stone';stone.id='stone'+i;
+    stone.style.cssText=`left:${sp.left};bottom:${sp.bottom};width:${sp.size}px;height:${sp.size*0.6}px;`;
+    document.getElementById('pathStones').appendChild(stone);
+  });
+})();
+
+// Light stones as user scrolls
+window.addEventListener('scroll',()=>{
+  const scrollPct=window.scrollY/(document.body.scrollHeight-window.innerHeight);
+  const totalStones=8;
+  const litCount=Math.floor(scrollPct*totalStones);
+  for(let i=0;i<totalStones;i++){
+    const stone=document.getElementById('stone'+i);
+    if(stone) stone.classList.toggle('lit',i<=litCount);
+  }
+});
+
+// ── SHOOTING STARS ──
+const wishes=[`🌙 A moonlit wish for ${NAME}!`,'✨ The garden heard you!','🌸 Petals are falling just for you!','🌟 The moon is watching over you tonight!','🦉 The owl carries your wish to the stars!'];
+function spawnStar(){
+  const s=document.createElement('div');
+  s.style.cssText=`position:fixed;width:3px;height:3px;background:#d4c8ff;border-radius:50%;top:${Math.random()*45}%;left:${Math.random()*65}%;z-index:4;cursor:pointer;filter:drop-shadow(0 0 6px #c8b4ff);pointer-events:all;`;
+  s.innerHTML='<span style="position:absolute;top:50%;right:100%;transform:translateY(-50%);width:70px;height:1px;background:linear-gradient(to left,rgba(200,180,255,0.8),transparent);display:block;"></span>';
+  document.body.appendChild(s);
+  let t=setTimeout(()=>{if(document.body.contains(s)){s.remove();spawnStar();}},5000);
+  function fire(){clearTimeout(t);const p=document.getElementById('wishPop');p.textContent=wishes[Math.floor(Math.random()*wishes.length)];p.classList.add('show');setTimeout(()=>p.classList.remove('show'),2500);setTimeout(()=>{s.remove();spawnStar();},800);}
+  s.addEventListener('touchstart',(e)=>{e.preventDefault();fire();},{passive:false});
+  s.addEventListener('click',fire);
+}
+for(let i=0;i<3;i++) setTimeout(spawnStar,i*1800+800);
+
+// ── GATE — hide all sections after sec2 until birthday ──
+document.querySelectorAll('.section').forEach(s=>{
+  if(s.id!=='sec1'&&s.id!=='sec2') s.classList.add('locked-section');
+});
+
+// ── NAV DOTS ──
+const sections=document.querySelectorAll('.section');
+const navEl=document.getElementById('navDots');
+sections.forEach((_,i)=>{
+  const d=document.createElement('div');d.className='dot'+(i===0?' active':'');
+  d.addEventListener('touchstart',(e)=>{e.preventDefault();sections[i].scrollIntoView({behavior:'smooth'});},{passive:false});
+  d.addEventListener('click',()=>sections[i].scrollIntoView({behavior:'smooth'}));
+  navEl.appendChild(d);
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      const idx=Array.from(sections).indexOf(e.target);
+      document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+      if(e.target.id==='sec7')finalConf();
+    }
+  });
+},{threshold:0.4});
+sections.forEach(s=>obs.observe(s));
+
+// ── MOON PHASES ──
+const phaseMsgs=[
+  `🌑 "In the new moon's darkness, new beginnings are quietly forming for you."`,
+  `🌒 "You are growing, expanding, becoming more yourself with every passing day."`,
+  `🌓 "Halfway between who you were and who you are becoming — beautiful."`,
+  `🌔 "The light in you is growing, ${NAME}. The world can already see it."`,
+  `🌕 "Tonight the full moon shines — and it shines brightest for you."`,
+  `🌖 "Even as things fade, they leave something beautiful behind — just like you."`,
+  `🌗 "There is grace in the letting go, and you carry it so well."`,
+  `🌘 "Every ending in your life is making space for something extraordinary."`,
+];
+document.querySelectorAll('.phase-item').forEach(item=>{
+  const fire=(e)=>{
+    e.preventDefault();
+    document.querySelectorAll('.phase-item').forEach(p=>p.classList.remove('active'));
+    item.classList.add('active');
+    const msg=document.getElementById('phaseMsg');
+    msg.classList.remove('show');
+    setTimeout(()=>{msg.textContent=phaseMsgs[parseInt(item.dataset.phase)];msg.classList.add('show');},200);
+    confetti(5,'#c8b4ff');
+  };
+  item.addEventListener('touchstart',fire,{passive:false});
+  item.addEventListener('click',fire);
+});
+
+// ── OWL ──
+const owlMessages=[
+  `"Hoo hoo — the garden has been waiting for your birthday all year long! 🦉"`,
+  `"Hoo hoo — the moon told me you are one of its favourite people. 🌙"`,
+  `"Hoo hoo — I have watched over this garden many nights, and none as special as tonight. 🌸"`,
+  `"Hoo hoo — the fireflies all gathered for you, ${NAME}. Can you see them? ✨"`,
+  `"Hoo hoo — the garden whispers: happy birthday to someone truly rare. 💫"`,
+];
+let owlIdx=0;
+const owlEl=document.getElementById('owlEl');
+function tapOwl(){
+  if(owlIdx>=owlMessages.length)return;
+  hooting();
+  const msg=document.getElementById('owlMsg');
+  msg.classList.remove('show');
+  setTimeout(()=>{msg.textContent=owlMessages[owlIdx];msg.classList.add('show');owlIdx++;document.getElementById('owlCount').textContent=`${owlIdx} / ${owlMessages.length} hoots heard`;},200);
+  confetti(6,'#c8b4ff');
+}
+owlEl.addEventListener('touchstart',(e)=>{e.preventDefault();tapOwl();},{passive:false});
+owlEl.addEventListener('click',tapOwl);
+
+function hooting(){
+  try{
+    const ctx=getAudioCtx();if(!ctx)return;
+    // Owl hoot sound — two descending tones
+    [[280,0,0.3],[220,0.35,0.4],[270,0.9,0.25],[210,1.2,0.35]].forEach(([freq,delay,dur])=>{
+      const osc=ctx.createOscillator();const g=ctx.createGain();
+      osc.connect(g);g.connect(ctx.destination);
+      osc.type='sine';osc.frequency.value=freq;
+      const t=ctx.currentTime+delay;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.12,t+0.05);
+      g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+      osc.start(t);osc.stop(t+dur+0.1);
+    });
+  }catch(e){}
+}
+
+// ── COUNTDOWN ──
+function pad(n){return String(n).padStart(2,'0');}
+let bdReached=false;
+(function(){const now=new Date();const td=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();const bd=now.getFullYear()*10000+BIRTHDAY_MONTH*100+BIRTHDAY_DAY;if(td===bd){bdReached=true;unlockCd();}})();
+function tick(){
+  const now=new Date();
+  const target=new Date(now.getFullYear(),BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);
+  const diff=target-now;
+  if(diff<=0){if(!bdReached){bdReached=true;document.getElementById('cdRow').style.display='none';document.getElementById('bdMsg').classList.add('show');unlockCd();}return;}
+  document.getElementById('cdD').textContent=pad(Math.floor(diff/86400000));
+  document.getElementById('cdH').textContent=pad(Math.floor((diff%86400000)/3600000));
+  document.getElementById('cdM').textContent=pad(Math.floor((diff%3600000)/60000));
+  document.getElementById('cdS').textContent=pad(Math.floor((diff%60000)/1000));
+}
+function unlockCd(){
+  const btn=document.getElementById('cdBtn');btn.classList.remove('locked');btn.classList.add('unlocked');
+  document.getElementById('cdLock').classList.add('hidden');
+  confetti(25,'#c8b4ff');confetti(15,'#f0d8ff');
+  // Reveal all hidden sections
+  document.querySelectorAll('.locked-section').forEach(s=>s.classList.remove('locked-section'));
+}
+const cdBtnEl=document.getElementById('cdBtn');
+function handleCd(){
+  if(bdReached){document.getElementById('sec5').scrollIntoView({behavior:'smooth'});}
+  else{cdBtnEl.classList.add('shake');setTimeout(()=>cdBtnEl.classList.remove('shake'),350);}
+}
+cdBtnEl.addEventListener('touchstart',(e)=>{e.preventDefault();handleCd();},{passive:false});
+cdBtnEl.addEventListener('click',handleCd);
+tick();const tickInt=setInterval(()=>{if(bdReached){clearInterval(tickInt);return;}tick();},1000);
+
+// ── SECRET CODE ──
+let codeSolved=false;
+const digs=document.querySelectorAll('.code-d');
+digs.forEach((inp,i)=>{
+  inp.addEventListener('input',()=>{inp.value=inp.value.slice(-1).replace(/\D/,'');if(inp.value&&i<3)digs[i+1].focus();checkCode();});
+  inp.addEventListener('keydown',(e)=>{if(e.key==='Backspace'&&!inp.value&&i>0)digs[i-1].focus();});
+});
+function checkCode(){
+  const entered=Array.from(digs).map(d=>d.value).join('');
+  if(entered.length<4)return;
+  if(entered===SECRET_CODE){
+    document.getElementById('codeStatus').textContent='✅ The gate opens... 🌿';
+    document.getElementById('codeStatus').style.color='#88ffcc';
+    digs.forEach(d=>d.classList.add('correct'));
+    confetti(15,'#c8b4ff');confetti(10,'#f0d8ff');
+    setTimeout(()=>{document.getElementById('sec6').scrollIntoView({behavior:'smooth'});typeLetter();},900);
+  } else {
+    digs.forEach(d=>{d.classList.add('wrong');setTimeout(()=>d.classList.remove('wrong'),400);d.value='';});
+    document.getElementById('codeStatus').textContent='❌ Wrong code. The gate remains locked.';
+    document.getElementById('codeStatus').style.color='#ff6688';
+    setTimeout(()=>digs[0].focus(),420);
+  }
+}
+
+// ── LETTER ──
+let letterDone=false;
+function typeLetter(){
+  if(letterDone)return;letterDone=true;
+  const el=document.getElementById('letterEl');el.textContent='';
+  let i=0;
+  const iv=setInterval(()=>{
+    if(i<LETTER.length){el.textContent+=LETTER[i];i++;}
+    else{clearInterval(iv);confetti(15,'#c8b4ff');confetti(12,'#f0d8ff');}
+  },22);
+}
+
+// ── AUDIO ENGINE ──
+let audioCtx=null,isPlaying=false,audioReady=false,currentSong=window.MUSIC||'piano',activeSources=[];
+function getAudioCtx(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch(e){return null;}}
+function unlockAudio(){if(audioReady)return;try{const ctx=getAudioCtx();if(!ctx)return;const b=ctx.createBuffer(1,1,ctx.sampleRate);const s=ctx.createBufferSource();s.buffer=b;s.connect(ctx.destination);s.start(0);audioReady=true;}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:true});
+document.addEventListener('click',unlockAudio,{once:true});
+const NOTES={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99};
+const {C4,D4,E4,F4,G4,A4,B4,C5,D5,E5,F5,G5}=NOTES;
+const HB_NOTES=[[G4,0,.75],[G4,.75,.25],[A4,1,1],[G4,2,1],[C5,3,1],[B4,4,2],[G4,6,.75],[G4,6.75,.25],[A4,7,1],[G4,8,1],[D5,9,1],[C5,10,2],[G4,12,.75],[G4,12.75,.25],[G5,13,1],[E5,14,1],[C5,15,.75],[B4,15.75,.25],[A4,16,2],[F5,18,.75],[F5,18.75,.25],[E5,19,1],[C5,20,1],[D5,21,1],[C5,22,3]];
+function makeReverb(ctx,secs=1.5){const conv=ctx.createConvolver();const len=ctx.sampleRate*secs;const buf=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);}conv.buffer=buf;return conv;}
+function stopAllSources(){activeSources.forEach(s=>{try{s.stop();}catch(e){}});activeSources=[];}
+function playNote(ctx,dest,freq,start,dur,type='triangle',vol=0.4,attack=0.05,decay=0.2){const osc=ctx.createOscillator();const g=ctx.createGain();osc.type=type;osc.frequency.value=freq;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(vol,start+attack);g.gain.exponentialRampToValueAtTime(vol*0.4,start+decay);g.gain.exponentialRampToValueAtTime(0.001,start+dur);osc.connect(g);g.connect(dest);osc.start(start);osc.stop(start+dur+0.1);activeSources.push(osc);}
+const SONGS={
+  piano:{label:'🎹 Piano',play(ctx,master,startOffset){const rev=makeReverb(ctx,2);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.35;rg.connect(rev);const BPM=130,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.9,'triangle',0.4,0.05,0.2);playNote(ctx,rg,f*2.005,ctx.currentTime+startOffset+t*B,d*B*0.9,'sine',0.12,0.05,0.2);});return 25*B;}},
+  rock:{label:'🎸 Rock',play(ctx,master,startOffset){const BPM=180,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.85,'sawtooth',0.35,0.01,0.05);playNote(ctx,master,f*1.5,ctx.currentTime+startOffset+t*B,d*B*0.5,'square',0.08,0.01,0.05);});for(let i=0;i<25;i+=1){const t=ctx.currentTime+startOffset+i*B;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+0.1);g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.12);o.connect(g);g.connect(master);o.start(t);o.stop(t+0.15);activeSources.push(o);}return 25*B;}},
+  orchestral:{label:'🎻 Orchestral',play(ctx,master,startOffset){const rev=makeReverb(ctx,3);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.6;rg.connect(rev);const BPM=100,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{[-0.02,-0.01,0,0.01,0.02].forEach((dt)=>{playNote(ctx,rg,f*(1+dt),ctx.currentTime+startOffset+t*B,d*B*0.95,'sawtooth',0.06,0.08,0.3);});if(t%2===0)playNote(ctx,master,f*0.5,ctx.currentTime+startOffset+t*B,d*B*0.5,'square',0.08,0.02,0.1);});return 25*B;}},
+  jazz:{label:'🎺 Jazz',play(ctx,master,startOffset){const rev=makeReverb(ctx,1.2);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.3;rg.connect(rev);const BPM=145,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.8,'square',0.25,0.03,0.08);playNote(ctx,rg,f*2,ctx.currentTime+startOffset+t*B,d*B*0.6,'sine',0.1,0.03,0.08);});const bassNotes=[C4,G4,A4,G4,C4,D4,E4,G4,C4,G4,F4,G4,C4,A4,G4,F4,E4,D4,C4,G4,F4,E4,D4,C4,C4];bassNotes.forEach((f,i)=>{playNote(ctx,master,f*0.5,ctx.currentTime+startOffset+i*B,B*0.7,'triangle',0.18,0.01,0.05);});return 25*B;}},
+  lofi:{label:'🎧 Lo-fi',play(ctx,master,startOffset){const BPM=90,B=60/BPM;const rev=makeReverb(ctx,2.5);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.5;rg.connect(rev);HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,rg,f,ctx.currentTime+startOffset+t*B,d*B*1.1,'sine',0.35,0.08,0.4);playNote(ctx,rg,f*0.5,ctx.currentTime+startOffset+t*B,d*B*1.2,'sine',0.1,0.1,0.5);});return 25*B;}}
+};
+let loopTimeout=null;
+function startSong(songKey){
+  stopAllSources();
+  if(loopTimeout){clearTimeout(loopTimeout);loopTimeout=null;}
+  currentSong=songKey;
+  try{
+    const ctx=getAudioCtx();if(!ctx)return;
+    const master=ctx.createGain();master.gain.value=0.06;master.connect(ctx.destination);
+    const song=SONGS[songKey]||SONGS.piano;
+    const dur=song.play(ctx,master,0.1);
+    function loop(){const ctx2=getAudioCtx();if(!ctx2)return;const master2=ctx2.createGain();master2.gain.value=0.06;master2.connect(ctx2.destination);song.play(ctx2,master2,0.1);loopTimeout=setTimeout(loop,(dur+0.5)*1000);}
+    loopTimeout=setTimeout(loop,(dur+0.5)*1000);
+    
+  }catch(e){}
+}
+function startAudio(){
+  if(isPlaying)return;isPlaying=true;
+  document.getElementById('audioBtn').style.display='none';
+  
+  startSong(currentSong);
+}
+const audioBtn=document.getElementById('audioBtn');
+audioBtn.addEventListener('touchstart',(e)=>{e.preventDefault();startAudio();},{passive:false});
+audioBtn.addEventListener('click',startAudio);
+
+// ── FINAL ──
+let finalDone=false;
+function finalConf(){if(finalDone)return;finalDone=true;setTimeout(()=>{confetti(50,'#c8b4ff');confetti(40,'#f0d8ff');confetti(25,'#a090e0');},300);}
+const replayBtn=document.getElementById('replayBtn');
+replayBtn.addEventListener('touchstart',(e)=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});},{passive:false});
+replayBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// ── CONFETTI ──
+function confetti(count,color){for(let i=0;i<count;i++){const c=document.createElement('div');c.className='cp';c.style.cssText=`left:${Math.random()*100}vw;top:0;background:${color};width:${Math.random()*7+3}px;height:${Math.random()*7+3}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${(Math.random()*1.5+1).toFixed(1)}s;animation-delay:${(Math.random()*.4).toFixed(1)}s;`;document.body.appendChild(c);setTimeout(()=>c.remove(),2500);}}
+</script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday!</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Cinzel:wght@400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<script>
+// ╔══════════════════════════════════════════════════════╗
+// ║           ✏️  EDIT ONLY THIS SECTION                 ║
+// ╠══════════════════════════════════════════════════════╣
+
+const NAME           = "Priya";
+const BIRTHDAY_DAY   = 25;
+const BIRTHDAY_MONTH = 6;
+const SECRET_CODE    = "2025";
+
+// MUSIC — pick one: "piano" | "rock" | "orchestral" | "jazz" | "lofi"
+window.MUSIC = "piano"; const MUSIC = window.MUSIC;
+
+// COLOR THEME — pick one:
+// "ocean"   → Ocean Blue & Silver (default)
+// "sunset"  → Sunset Orange & Coral
+// "deepsea" → Deep Sea Teal & Aqua
+// "purple"  → Starry Purple & Lavender
+const THEME = "ocean";
+
+// BOTTLE MESSAGES (tap the bottle to reveal, one by one)
+const BOTTLE_MESSAGES = [
+  `🌊 "Somewhere across the ocean, a wish was sent just for you."`,
+  `🌟 "You are someone worth crossing every sea for."`,
+  `🌙 "The tide brought this message on the most special night."`,
+  `💙 "May this year wash away everything heavy and bring in only good things."`,
+  `✨ "The stars wrote your name on the shore tonight, ${NAME}."`,
+];
+
+// LETTER inside the bottle (unlocked by secret code)
+const LETTER = `🌊 Happy Birthday, ${NAME} 🌊
+
+This message travelled far —
+across every wave, every tide,
+every quiet stretch of sea —
+
+just to reach you on this day.
+
+You are the kind of person
+the ocean would write poems about.
+Steady. Deep. Full of something
+most people never find.
+
+On this birthday,
+may the waves bring you only
+the things you've been waiting for.
+
+With love,
+from across the shore. 🌙`;
+
+// ╚══════════════════════════════════════════════════════╝
+//   DO NOT EDIT ANYTHING BELOW THIS LINE
+// ╚══════════════════════════════════════════════════════╝
+
+const BOTTLE_THEMES = {
+  ocean:  { accent:'#64b4ff', accent2:'#1a6fff', bg:'#020b18', skyBg:'linear-gradient(180deg,#020b18 0%,#051628 40%,#0a2040 70%,#0f2d55 100%)', shoreBg:'linear-gradient(180deg,transparent 0%,#0a1a30 40%,#06111f 100%)', letterBg:'linear-gradient(160deg,#f8f4e8,#f0ead8)', letterText:'#1a3050', confetti1:'#64b4ff', confetti2:'#aadeff' },
+  sunset: { accent:'#ff8c55', accent2:'#e04020', bg:'#0f0805', skyBg:'linear-gradient(180deg,#0f0805 0%,#1e1008 40%,#2d1a0a 70%,#3d2010 100%)', shoreBg:'linear-gradient(180deg,transparent 0%,#1a0e08 40%,#0f0805 100%)', letterBg:'linear-gradient(160deg,#fff5f0,#ffede8)', letterText:'#3a1005', confetti1:'#ff8c55', confetti2:'#ffcc88' },
+  deepsea:{ accent:'#22ddc8', accent2:'#009980', bg:'#020f0d', skyBg:'linear-gradient(180deg,#020f0d 0%,#051a18 40%,#0a2825 70%,#0f3530 100%)', shoreBg:'linear-gradient(180deg,transparent 0%,#0a1e1a 40%,#020f0d 100%)', letterBg:'linear-gradient(160deg,#f0fff8,#e8fff4)', letterText:'#0a2a25', confetti1:'#22ddc8', confetti2:'#88ffee' },
+  purple: { accent:'#b088ff', accent2:'#7033ee', bg:'#0a0515', skyBg:'linear-gradient(180deg,#0a0515 0%,#120828 40%,#1a0d40 70%,#200f55 100%)', shoreBg:'linear-gradient(180deg,transparent 0%,#100820 40%,#0a0515 100%)', letterBg:'linear-gradient(160deg,#f8f4ff,#f0e8ff)', letterText:'#1a0840', confetti1:'#b088ff', confetti2:'#ddbbff' },
+};
+const T = BOTTLE_THEMES[THEME] || BOTTLE_THEMES.ocean;
+
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  if(!p.get('preview'))return;
+  if(p.get('name'))   window.NAME=p.get('name');
+  if(p.get('day'))    window.BIRTHDAY_DAY=parseInt(p.get('day'));
+  if(p.get('month'))  window.BIRTHDAY_MONTH=parseInt(p.get('month'));
+  if(p.get('code'))   window.SECRET_CODE=p.get('code');
+  if(p.get('music'))  window.MUSIC=p.get('music');
+  if(p.get('theme'))  Object.assign(T, BOTTLE_THEMES[p.get('theme')]||BOTTLE_THEMES.ocean);
+  if(p.get('letter')) window.LETTER=decodeURIComponent(p.get('letter'));
+})();
+
+document.title=`Happy Birthday ${NAME}! 🍾`;
+const themeStyle=document.createElement('style');
+themeStyle.textContent=`
+body{background:${T.bg};}
+.sky{background:${T.skyBg};}
+.shore{background:${T.shoreBg};}
+.dot.active{background:${T.accent};}
+.dot{border-color:${T.accent}44;}
+.scroll-down{color:${T.accent}44;}
+.shore-name{background:linear-gradient(135deg,${T.accent},${T.accent2},${T.accent});-webkit-background-clip:text;background-clip:text;}
+.s{background:${Math.random()>0.7?T.accent:'white'};}
+.bottle{filter:drop-shadow(0 0 20px ${T.accent}33);}
+.bottle-msg{border-color:${T.accent}12;}
+.cd-unit{border-color:${T.accent}12;}
+.cd-unit::before{background:linear-gradient(90deg,transparent,${T.accent}44,transparent);}
+.cd-val{color:${T.accent};text-shadow:0 0 20px ${T.accent}55;}
+.bd-msg{color:${T.accent};}
+.cd-btn.unlocked{background:linear-gradient(135deg,${T.accent2},${T.accent});color:${T.bg};}
+.code-dig{border-color:${T.accent}22;color:${T.accent};}
+.code-dig:focus{border-color:${T.accent};box-shadow:0 0 12px ${T.accent}22;}
+.letter-scroll{background:${T.letterBg};}
+.letter-txt{color:${T.letterText};}
+.final-name-el{background:linear-gradient(135deg,${T.accent},${T.accent2},${T.accent});-webkit-background-clip:text;background-clip:text;}
+.wish-popup{border-color:${T.accent}44;color:${T.accent};}
+#audioBtn{border-color:${T.accent}22;color:${T.accent};}
+`;
+document.head.appendChild(themeStyle);
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#020b18;font-family:'Cormorant Garamond',serif;overflow-x:hidden;color:white;}
+
+/* ── NIGHT SKY & SHORE ── */
+.sky{position:fixed;top:0;left:0;width:100%;height:70%;pointer-events:none;z-index:0;
+  background:linear-gradient(180deg,#020b18 0%,#051628 40%,#0a2040 70%,#0f2d55 100%);}
+.shore{position:fixed;bottom:0;left:0;width:100%;height:35%;pointer-events:none;z-index:0;
+  background:linear-gradient(180deg,transparent 0%,#0a1a30 40%,#06111f 100%);}
+/* Stars */
+.stars-wrap{position:fixed;top:0;left:0;width:100%;height:65%;pointer-events:none;z-index:1;}
+.s{position:absolute;border-radius:50%;background:white;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.1;}to{opacity:1;}}
+/* Moon */
+.moon-wrap{position:fixed;top:40px;right:60px;z-index:2;pointer-events:none;}
+.moon{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fffbe0,#f0d860);box-shadow:0 0 30px rgba(255,240,100,0.4),0 0 60px rgba(255,220,60,0.15);animation:moonFloat 6s ease-in-out infinite alternate;}
+@keyframes moonFloat{from{transform:translateY(0);}to{transform:translateY(-10px);}}
+.moon-reflection{position:fixed;bottom:0;right:50px;width:4px;height:30%;background:linear-gradient(to bottom,rgba(255,240,100,0.15),rgba(255,240,100,0.02));z-index:1;pointer-events:none;}
+/* Waves */
+.wave{position:fixed;bottom:0;left:0;width:200%;height:120px;pointer-events:none;z-index:3;}
+.wave-path{fill:none;stroke:rgba(100,180,255,0.12);stroke-width:2;}
+.wave1{animation:waveMoveA 8s linear infinite;}
+.wave2{animation:waveMoveB 12s linear infinite;opacity:0.6;}
+@keyframes waveMoveA{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes waveMoveB{from{transform:translateX(-20%);}to{transform:translateX(-70%);}}
+/* Sparkles on water */
+.water-sparkle{position:fixed;border-radius:50%;background:rgba(150,220,255,0.6);pointer-events:none;z-index:2;animation:wSparkle var(--ws) ease-in-out infinite alternate;}
+@keyframes wSparkle{from{opacity:0.1;transform:scale(0.8);}to{opacity:0.8;transform:scale(1.2);}}
+
+/* ── SECTIONS ── */
+.section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:10;padding:60px 20px;opacity:0;transition:opacity 0.8s;}
+.section.locked-section{display:none;}
+.section.visible{opacity:1;}
+.nav-dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:100;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(100,180,255,0.2);border:1px solid rgba(100,180,255,0.3);cursor:pointer;transition:all 0.3s;}
+.dot.active{background:#64b4ff;transform:scale(1.5);}
+.scroll-down{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(100,180,255,0.35);animation:bounce 2s ease-in-out infinite;margin-top:20px;font-family:'Cinzel',monospace;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* ── SEC 1: LANDING ── */
+#sec1{text-align:center;gap:20px;}
+.shore-title{font-family:'Cinzel',serif;font-size:clamp(0.75rem,2.5vw,1rem);letter-spacing:0.3em;text-transform:uppercase;color:rgba(100,180,255,0.5);}
+.shore-name{font-family:'Dancing Script',cursive;font-size:clamp(3rem,11vw,5.5rem);font-weight:700;background:linear-gradient(135deg,#64b4ff,#aadeff,#64b4ff);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:nameShimmer 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(100,180,255,0.4));}
+@keyframes nameShimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.shore-sub{font-size:clamp(0.85rem,3vw,1.1rem);color:rgba(170,220,255,0.55);font-style:italic;letter-spacing:0.06em;}
+.shore-hint{font-size:0.78rem;color:rgba(100,180,255,0.35);letter-spacing:0.1em;}
+
+/* ── SEC 2: BOTTLE ── */
+#sec2{gap:24px;text-align:center;}
+#sec2 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(100,180,255,0.6);}
+.bottle-wrap{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;}
+.bottle{font-size:clamp(80px,22vw,130px);animation:bottleFloat 4s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px rgba(100,180,255,0.3));transition:transform 0.15s;user-select:none;line-height:1;}
+@keyframes bottleFloat{from{transform:translateY(0) rotate(-5deg);}to{transform:translateY(-16px) rotate(5deg);}}
+.bottle:active{transform:scale(0.93)!important;}
+.bottle-msg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,3.2vw,1.2rem);color:rgba(170,220,255,0.85);max-width:360px;line-height:1.8;text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center;background:rgba(0,50,100,0.15);border:1px solid rgba(100,180,255,0.12);border-radius:20px;padding:18px 22px;backdrop-filter:blur(8px);opacity:0;transition:opacity 0.5s;}
+.bottle-msg.show{opacity:1;}
+.bottle-hint{font-size:0.78rem;color:rgba(100,180,255,0.3);letter-spacing:0.12em;text-transform:uppercase;font-family:'Cinzel',serif;}
+.bottle-count{font-family:'Cinzel',serif;font-size:0.82rem;color:rgba(100,180,255,0.4);letter-spacing:0.1em;}
+
+/* ── SEC 3: COUNTDOWN ── */
+#sec3{gap:28px;text-align:center;}
+#sec3 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(100,180,255,0.6);}
+.cd-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.cd-unit{background:rgba(0,50,100,0.15);border:1px solid rgba(100,180,255,0.12);border-radius:14px;padding:16px 18px;min-width:78px;text-align:center;position:relative;overflow:hidden;}
+.cd-unit::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(100,180,255,0.3),transparent);}
+.cd-val{font-family:'Cinzel',serif;font-size:clamp(1.8rem,6vw,2.8rem);color:#64b4ff;line-height:1;font-weight:600;text-shadow:0 0 20px rgba(100,180,255,0.5);}
+.cd-label{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(100,180,255,0.35);margin-top:6px;font-family:'Cinzel',serif;}
+.bd-msg{display:none;font-family:'Dancing Script',cursive;font-size:1.3rem;color:#64b4ff;text-align:center;}
+.bd-msg.show{display:block;}
+.cd-btn{padding:13px 38px;border-radius:50px;font-family:'Cinzel',serif;font-size:0.88rem;letter-spacing:0.1em;cursor:not-allowed;border:none;transition:all 0.2s;margin-top:4px;}
+.cd-btn.locked{background:rgba(100,180,255,0.05);color:rgba(100,180,255,0.2);border:1px solid rgba(100,180,255,0.1);}
+.cd-btn.unlocked{background:linear-gradient(135deg,#1a5080,#64b4ff);color:white;cursor:pointer;box-shadow:0 4px 20px rgba(100,180,255,0.3);}
+.cd-lock{font-size:0.75rem;color:rgba(100,180,255,0.25);letter-spacing:0.08em;font-family:'Cinzel',serif;}
+.cd-lock.hidden{opacity:0;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.shake{animation:shake 0.3s ease;}
+
+/* ── SEC 4: CODE ── */
+#sec4{gap:24px;text-align:center;}
+#sec4 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(100,180,255,0.6);}
+.code-hint-txt{font-size:0.9rem;color:rgba(170,220,255,0.5);font-style:italic;line-height:1.6;max-width:300px;text-align:center;}
+.code-inputs{display:flex;gap:10px;justify-content:center;}
+.code-dig{width:56px;height:64px;background:rgba(0,50,100,0.12);border:1.5px solid rgba(100,180,255,0.2);border-radius:12px;font-family:'Cinzel',serif;font-size:1.8rem;color:#64b4ff;text-align:center;outline:none;transition:border 0.2s,box-shadow 0.2s;}
+.code-dig:focus{border-color:#64b4ff;box-shadow:0 0 12px rgba(100,180,255,0.2);}
+.code-dig.wrong{border-color:#ff4444;animation:shake 0.3s ease;}
+.code-dig.correct{border-color:#44ddaa;}
+.code-stat{font-size:0.82rem;min-height:22px;font-style:italic;color:rgba(170,220,255,0.4);}
+
+/* ── SEC 5: LETTER ── */
+#sec5{gap:24px;text-align:center;}
+#sec5 h2{font-family:'Cinzel',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.2em;text-transform:uppercase;color:rgba(100,180,255,0.6);}
+.letter-scroll{background:linear-gradient(160deg,#f8f4e8,#f0ead8);border-radius:8px;padding:26px 22px;max-width:400px;width:100%;text-align:left;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.4);}
+.letter-scroll::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(transparent,transparent 27px,rgba(100,150,200,0.1) 28px);pointer-events:none;}
+.letter-txt{font-family:'Dancing Script',cursive;font-size:clamp(0.92rem,2.5vw,1.1rem);color:#1a3050;line-height:2;white-space:pre-line;position:relative;z-index:1;}
+.open-hint{font-size:0.75rem;color:rgba(100,180,255,0.3);letter-spacing:0.12em;text-transform:uppercase;animation:pulse 2s ease-in-out infinite;font-family:'Cinzel',serif;}
+@keyframes pulse{0%,100%{opacity:0.3;}50%{opacity:0.8;}}
+
+/* ── SEC 6: FINAL ── */
+#sec6{gap:24px;text-align:center;}
+.final-name-el{font-family:'Dancing Script',cursive;font-size:clamp(3rem,12vw,5.5rem);font-weight:700;background:linear-gradient(135deg,#64b4ff,#aadeff,#64b4ff);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:nameShimmer 4s ease-in-out infinite;}
+.final-msg-el{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,3.5vw,1.4rem);color:rgba(170,220,255,0.7);max-width:480px;line-height:1.8;}
+.final-sub-el{font-size:0.8rem;color:rgba(100,180,255,0.3);letter-spacing:0.15em;text-transform:uppercase;font-family:'Cinzel',serif;}
+.replay-btn{padding:11px 32px;background:rgba(100,180,255,0.08);color:#64b4ff;border:1px solid rgba(100,180,255,0.2);border-radius:50px;font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;}
+.final-icons{font-size:2rem;animation:hp 3s ease-in-out infinite alternate;}
+@keyframes hp{from{transform:scale(1);}to{transform:scale(1.06);}}
+
+/* CONFETTI */
+.cp{position:fixed;pointer-events:none;z-index:9998;animation:cpF linear forwards;}
+@keyframes cpF{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* AUDIO */
+#audioBtn{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(100,180,255,0.08);border:1px solid rgba(100,180,255,0.2);border-radius:50px;padding:8px 20px;font-size:0.75rem;color:#64b4ff;letter-spacing:0.08em;z-index:999;cursor:pointer;font-family:'Cinzel',serif;}
+
+/* WISH POPUP */
+.wish-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(2,11,24,0.95);border:1px solid rgba(100,180,255,0.3);border-radius:20px;padding:12px 24px;font-style:italic;color:#64b4ff;font-size:0.95rem;backdrop-filter:blur(12px);z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;font-family:'Cormorant Garamond',serif;}
+.wish-popup.show{transform:translateX(-50%) translateY(0);}
+
+</style>
+
+<div class="sky"></div>
+<div class="shore"></div>
+<div class="stars-wrap" id="starsWrap"></div>
+<div class="moon-wrap"><div class="moon"></div></div>
+<div class="moon-reflection"></div>
+
+<!-- Waves -->
+<svg class="wave wave1" viewBox="0 0 1200 120" preserveAspectRatio="none">
+  <path class="wave-path" d="M0,60 C200,20 400,100 600,60 C800,20 1000,100 1200,60 L1200,120 L0,120 Z"/>
+</svg>
+<svg class="wave wave2" viewBox="0 0 1200 120" preserveAspectRatio="none" style="bottom:10px;opacity:0.4;">
+  <path class="wave-path" d="M0,40 C150,80 350,10 600,50 C850,90 1050,20 1200,50 L1200,120 L0,120 Z"/>
+</svg>
+
+<div class="nav-dots" id="navDots"></div>
+<button id="audioBtn">🎵 Play music</button>
+<div class="wish-popup" id="wishPopup"></div>
+
+<!-- SEC 1: LANDING -->
+<section class="section" id="sec1">
+  <div class="shore-title">🌊 A message washed ashore for</div>
+  <div class="shore-name" id="shoreName"></div>
+  <div class="shore-sub">Found on the starry night shore 🌌</div>
+  <div class="shore-hint">🌠 Tap a shooting star · Scroll to explore</div>
+  <div class="scroll-down">FOLLOW THE TIDE ↓</div>
+</section>
+
+<!-- SEC 2: COUNTDOWN -->
+<section class="section" id="sec2">
+  <h2>⏳ BIRTHDAY TIDE COUNTDOWN</h2>
+  <div class="cd-row" id="cdRow">
+    <div class="cd-unit"><div class="cd-val" id="cdD">--</div><div class="cd-label">Days</div></div>
+    <div class="cd-unit"><div class="cd-val" id="cdH">--</div><div class="cd-label">Hours</div></div>
+    <div class="cd-unit"><div class="cd-val" id="cdM">--</div><div class="cd-label">Mins</div></div>
+    <div class="cd-unit"><div class="cd-val" id="cdS">--</div><div class="cd-label">Secs</div></div>
+  </div>
+  <div class="bd-msg" id="bdMsg">🌊 The tide is in — it's your birthday! 🌟</div>
+  <button class="cd-btn locked" id="cdBtn">Open the Letter →</button>
+  <span class="cd-lock" id="cdLock">🔒 Unlocks on your birthday</span>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 3: BOTTLE -->
+<section class="section" id="sec3">
+  <h2>🍾 TAP THE BOTTLE FOR MESSAGES</h2>
+  <div class="bottle-wrap">
+    <div class="bottle" id="bottleEl">🍾</div>
+  </div>
+  <div class="bottle-msg" id="bottleMsg"></div>
+  <p class="bottle-count" id="bottleCount">0 / 5 messages found</p>
+  <p class="bottle-hint">Each tap reveals a new message 🌊</p>
+  <div class="scroll-down">WADE DEEPER ↓</div>
+</section>
+
+<!-- SEC 4 -->
+<section class="section" id="sec4">
+  <h2>🔐 THE SECRET SEAL</h2>
+  <p class="code-hint-txt" id="codeHintEl"></p>
+  <div class="code-inputs">
+    <input class="code-dig" maxlength="1" type="tel" id="d0"/>
+    <input class="code-dig" maxlength="1" type="tel" id="d1"/>
+    <input class="code-dig" maxlength="1" type="tel" id="d2"/>
+    <input class="code-dig" maxlength="1" type="tel" id="d3"/>
+  </div>
+  <p class="code-stat" id="codeStat">ENTER THE SECRET CODE 🔐</p>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 5 -->
+<section class="section" id="sec5">
+  <h2>💌 THE MESSAGE INSIDE</h2>
+  <div class="letter-scroll" id="letterWrap">
+    <div class="letter-txt" id="letterTxt"></div>
+  </div>
+  <p class="open-hint" id="openHintEl" style="display:none;">Tap to open 🌊</p>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 6 -->
+<section class="section" id="sec6">
+  <div class="final-icons">🌊 🌙 🌊</div>
+  <div class="final-name-el" id="finalNameEl"></div>
+  <p class="final-msg-el" id="finalMsgEl"></p>
+  <p class="final-sub-el">✦ Written in the stars, sent by the sea ✦</p>
+  <button class="replay-btn" id="replayBtn">↺ Read Again</button>
+</section>
+
+<script>
+// ── INJECT ──
+document.getElementById('shoreName').textContent=NAME;
+document.getElementById('finalNameEl').textContent=NAME;
+document.getElementById('finalMsgEl').textContent=`The tide will always find its way to you, ${NAME}. Happy Birthday. 🌊`;
+document.getElementById('codeHintEl').textContent=`Someone sealed this bottle especially for you, ${NAME}.\nEnter the secret code to break the seal.`;
+
+// ── STARS ──
+const sw=document.getElementById('starsWrap');
+for(let i=0;i<180;i++){const s=document.createElement('div');s.className='s';const sz=Math.random()*2+0.4;const isBlue=Math.random()>0.7;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;background:${isBlue?'#aadeff':'white'};--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;`;sw.appendChild(s);}
+
+// ── WATER SPARKLES ──
+for(let i=0;i<12;i++){const w=document.createElement('div');w.className='water-sparkle';const sz=Math.random()*3+1;w.style.cssText=`width:${sz}px;height:${sz}px;bottom:${Math.random()*25}%;left:${Math.random()*100}%;--ws:${(Math.random()*2+1).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;`;document.body.appendChild(w);}
+
+// ── SHOOTING STARS ──
+const wishes=[`🌠 Washed ashore for ${NAME}!`,'🌊 The sea heard your wish!','💫 A star fell just for you!','🌙 Magic is on its way!','🌟 Something beautiful is coming!'];
+function spawnStar(){
+  const s=document.createElement('div');
+  s.style.cssText=`position:fixed;width:3px;height:3px;background:#aadeff;border-radius:50%;top:${Math.random()*50}%;left:${Math.random()*60}%;z-index:4;cursor:pointer;filter:drop-shadow(0 0 6px #aadeff);`;
+  s.innerHTML='<span style="position:absolute;top:50%;right:100%;transform:translateY(-50%);width:60px;height:1px;background:linear-gradient(to left,rgba(170,220,255,0.8),transparent);display:block;"></span>';
+  document.body.appendChild(s);
+  let t=setTimeout(()=>{if(document.body.contains(s)){s.remove();spawnStar();}},5000);
+  function fire(){clearTimeout(t);s.style.animation='';const p=document.getElementById('wishPopup');p.textContent=wishes[Math.floor(Math.random()*wishes.length)];p.classList.add('show');setTimeout(()=>p.classList.remove('show'),2500);setTimeout(()=>{s.remove();spawnStar();},1000);}
+  s.addEventListener('touchstart',(e)=>{e.preventDefault();fire();},{passive:false});
+  s.addEventListener('click',fire);
+}
+for(let i=0;i<3;i++) setTimeout(spawnStar,i*1800+500);
+
+// ── GATE ──
+document.querySelectorAll('.section').forEach(s=>{if(s.id!=='sec1'&&s.id!=='sec2')s.classList.add('locked-section');});
+
+// ── NAV ──
+const sections=document.querySelectorAll('.section');
+const navEl=document.getElementById('navDots');
+sections.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.addEventListener('touchstart',(e)=>{e.preventDefault();sections[i].scrollIntoView({behavior:'smooth'});},{passive:false});d.addEventListener('click',()=>sections[i].scrollIntoView({behavior:'smooth'}));navEl.appendChild(d);});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');const idx=Array.from(sections).indexOf(e.target);document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));if(e.target.id==='sec6')finalConf();}});},{threshold:0.4});
+sections.forEach(s=>obs.observe(s));
+
+// ── BOTTLE ──
+let bottleIdx=0;
+const bottleEl=document.getElementById('bottleEl');
+function tapBottle(){
+  if(bottleIdx>=BOTTLE_MESSAGES.length)return;
+  const msg=document.getElementById('bottleMsg');
+  msg.classList.remove('show');
+  setTimeout(()=>{msg.textContent=BOTTLE_MESSAGES[bottleIdx];msg.classList.add('show');bottleIdx++;document.getElementById('bottleCount').textContent=`${bottleIdx} / ${BOTTLE_MESSAGES.length} messages found`;},200);
+  conf(5,'#64b4ff');
+  bottleEl.style.animation='none';setTimeout(()=>bottleEl.style.animation='',50);
+}
+bottleEl.addEventListener('touchstart',(e)=>{e.preventDefault();tapBottle();},{passive:false});
+bottleEl.addEventListener('click',tapBottle);
+
+// ── COUNTDOWN ──
+function pad(n){return String(n).padStart(2,'0');}
+let bdReached=false;
+(function(){const now=new Date();const td=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();const bd=now.getFullYear()*10000+BIRTHDAY_MONTH*100+BIRTHDAY_DAY;if(td===bd){bdReached=true;showBdUnlock();}})();
+function tick(){const now=new Date();const target=new Date(now.getFullYear(),BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);const diff=target-now;if(diff<=0){if(!bdReached){bdReached=true;document.getElementById('cdRow').style.display='none';document.getElementById('bdMsg').classList.add('show');showBdUnlock();}return;}document.getElementById('cdD').textContent=pad(Math.floor(diff/86400000));document.getElementById('cdH').textContent=pad(Math.floor((diff%86400000)/3600000));document.getElementById('cdM').textContent=pad(Math.floor((diff%3600000)/60000));document.getElementById('cdS').textContent=pad(Math.floor((diff%60000)/1000));}
+function showBdUnlock(){const btn=document.getElementById('cdBtn');btn.classList.remove('locked');btn.classList.add('unlocked');document.getElementById('cdLock').classList.add('hidden');conf(20,'#64b4ff');document.querySelectorAll('.locked-section').forEach(s=>s.classList.remove('locked-section'));}
+const cdBtnEl=document.getElementById('cdBtn');
+function handleCd(){if(bdReached){document.getElementById('sec4').scrollIntoView({behavior:'smooth'});}else{cdBtnEl.classList.add('shake');setTimeout(()=>cdBtnEl.classList.remove('shake'),350);}}
+cdBtnEl.addEventListener('touchstart',(e)=>{e.preventDefault();handleCd();},{passive:false});
+cdBtnEl.addEventListener('click',handleCd);
+tick();const ti=setInterval(()=>{if(bdReached){clearInterval(ti);return;}tick();},1000);
+
+// ── CODE ──
+let codeSolved=false;
+const digs=document.querySelectorAll('.code-dig');
+digs.forEach((inp,i)=>{inp.addEventListener('input',()=>{inp.value=inp.value.slice(-1).replace(/\D/,'');if(inp.value&&i<3)digs[i+1].focus();checkCode();});inp.addEventListener('keydown',(e)=>{if(e.key==='Backspace'&&!inp.value&&i>0)digs[i-1].focus();});});
+function checkCode(){
+  const entered=Array.from(digs).map(d=>d.value).join('');
+  if(entered.length<4)return;
+  if(entered===SECRET_CODE){
+    document.getElementById('codeStat').textContent='✅ Seal broken! Your message awaits...';
+    document.getElementById('codeStat').style.color='#44ddaa';
+    digs.forEach(d=>d.classList.add('correct'));
+    conf(15,'#64b4ff');
+    setTimeout(()=>{document.getElementById('sec5').scrollIntoView({behavior:'smooth'});typeLetter();},900);
+  }else{
+    digs.forEach(d=>{d.classList.add('wrong');setTimeout(()=>d.classList.remove('wrong'),400);d.value='';});
+    document.getElementById('codeStat').textContent='❌ Wrong code. Try again!';
+    document.getElementById('codeStat').style.color='#ff6666';
+    setTimeout(()=>digs[0].focus(),420);
+  }
+}
+
+// ── LETTER ──
+let letterDone=false;
+function typeLetter(){
+  if(letterDone)return;letterDone=true;
+  const el=document.getElementById('letterTxt');el.textContent='';
+  let i=0;
+  const iv=setInterval(()=>{if(i<LETTER.length){el.textContent+=LETTER[i];i++;}else{clearInterval(iv);conf(15,'#64b4ff');}},22);
+}
+
+// ── AUDIO ENGINE ──
+let audioCtx=null,isPlaying=false,audioReady=false,currentSong=window.MUSIC||'piano',activeSources=[];
+function getAudioCtx(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch(e){return null;}}
+function unlockAudio(){if(audioReady)return;try{const ctx=getAudioCtx();if(!ctx)return;const b=ctx.createBuffer(1,1,ctx.sampleRate);const s=ctx.createBufferSource();s.buffer=b;s.connect(ctx.destination);s.start(0);audioReady=true;}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:true});
+document.addEventListener('click',unlockAudio,{once:true});
+const NOTES={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99};
+const {C4,D4,E4,F4,G4,A4,B4,C5,D5,E5,F5,G5}=NOTES;
+const HB_NOTES=[[G4,0,.75],[G4,.75,.25],[A4,1,1],[G4,2,1],[C5,3,1],[B4,4,2],[G4,6,.75],[G4,6.75,.25],[A4,7,1],[G4,8,1],[D5,9,1],[C5,10,2],[G4,12,.75],[G4,12.75,.25],[G5,13,1],[E5,14,1],[C5,15,.75],[B4,15.75,.25],[A4,16,2],[F5,18,.75],[F5,18.75,.25],[E5,19,1],[C5,20,1],[D5,21,1],[C5,22,3]];
+function makeReverb(ctx,secs=1.5){const conv=ctx.createConvolver();const len=ctx.sampleRate*secs;const buf=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);}conv.buffer=buf;return conv;}
+function stopAllSources(){activeSources.forEach(s=>{try{s.stop();}catch(e){}});activeSources=[];}
+function playNote(ctx,dest,freq,start,dur,type='triangle',vol=0.4,attack=0.05,decay=0.2){const osc=ctx.createOscillator();const g=ctx.createGain();osc.type=type;osc.frequency.value=freq;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(vol,start+attack);g.gain.exponentialRampToValueAtTime(vol*0.4,start+decay);g.gain.exponentialRampToValueAtTime(0.001,start+dur);osc.connect(g);g.connect(dest);osc.start(start);osc.stop(start+dur+0.1);activeSources.push(osc);}
+const SONGS={
+  piano:{label:'🎹 Piano',play(ctx,master,startOffset){const rev=makeReverb(ctx,2);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.35;rg.connect(rev);const BPM=130,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.9,'triangle',0.4,0.05,0.2);playNote(ctx,rg,f*2.005,ctx.currentTime+startOffset+t*B,d*B*0.9,'sine',0.12,0.05,0.2);});return 25*B;}},
+  rock:{label:'🎸 Rock',play(ctx,master,startOffset){const BPM=180,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.85,'sawtooth',0.35,0.01,0.05);playNote(ctx,master,f*1.5,ctx.currentTime+startOffset+t*B,d*B*0.5,'square',0.08,0.01,0.05);});for(let i=0;i<25;i+=1){const t=ctx.currentTime+startOffset+i*B;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+0.1);g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.12);o.connect(g);g.connect(master);o.start(t);o.stop(t+0.15);activeSources.push(o);}return 25*B;}},
+  orchestral:{label:'🎻 Orchestral',play(ctx,master,startOffset){const rev=makeReverb(ctx,3);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.6;rg.connect(rev);const BPM=100,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{[-0.02,-0.01,0,0.01,0.02].forEach((dt)=>{playNote(ctx,rg,f*(1+dt),ctx.currentTime+startOffset+t*B,d*B*0.95,'sawtooth',0.06,0.08,0.3);});if(t%2===0)playNote(ctx,master,f*0.5,ctx.currentTime+startOffset+t*B,d*B*0.5,'square',0.08,0.02,0.1);});return 25*B;}},
+  jazz:{label:'🎺 Jazz',play(ctx,master,startOffset){const rev=makeReverb(ctx,1.2);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.3;rg.connect(rev);const BPM=145,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.8,'square',0.25,0.03,0.08);playNote(ctx,rg,f*2,ctx.currentTime+startOffset+t*B,d*B*0.6,'sine',0.1,0.03,0.08);});const bassNotes=[C4,G4,A4,G4,C4,D4,E4,G4,C4,G4,F4,G4,C4,A4,G4,F4,E4,D4,C4,G4,F4,E4,D4,C4,C4];bassNotes.forEach((f,i)=>{playNote(ctx,master,f*0.5,ctx.currentTime+startOffset+i*B,B*0.7,'triangle',0.18,0.01,0.05);});return 25*B;}},
+  lofi:{label:'🎧 Lo-fi',play(ctx,master,startOffset){const BPM=90,B=60/BPM;const rev=makeReverb(ctx,2.5);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.5;rg.connect(rev);HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,rg,f,ctx.currentTime+startOffset+t*B,d*B*1.1,'sine',0.35,0.08,0.4);playNote(ctx,rg,f*0.5,ctx.currentTime+startOffset+t*B,d*B*1.2,'sine',0.1,0.1,0.5);});return 25*B;}}
+};
+let loopTimeout=null;
+function startSong(songKey){
+  stopAllSources();
+  if(loopTimeout){clearTimeout(loopTimeout);loopTimeout=null;}
+  currentSong=songKey;
+  try{
+    const ctx=getAudioCtx();if(!ctx)return;
+    const master=ctx.createGain();master.gain.value=0.06;master.connect(ctx.destination);
+    const song=SONGS[songKey]||SONGS.piano;
+    const dur=song.play(ctx,master,0.1);
+    function loop(){const ctx2=getAudioCtx();if(!ctx2)return;const master2=ctx2.createGain();master2.gain.value=0.06;master2.connect(ctx2.destination);song.play(ctx2,master2,0.1);loopTimeout=setTimeout(loop,(dur+0.5)*1000);}
+    loopTimeout=setTimeout(loop,(dur+0.5)*1000);
+    
+  }catch(e){}
+}
+function startAudio(){
+  if(isPlaying)return;isPlaying=true;
+  document.getElementById('audioBtn').style.display='none';
+  
+  startSong(currentSong);
+}
+const audioBtn=document.getElementById('audioBtn');
+audioBtn.addEventListener('touchstart',(e)=>{e.preventDefault();startAudio();},{passive:false});
+audioBtn.addEventListener('click',startAudio);
+
+// ── FINAL ──
+let finalDone=false;
+function finalConf(){if(finalDone)return;finalDone=true;setTimeout(()=>{conf(40,'#64b4ff');conf(30,'#aadeff');},300);}
+const replayBtn=document.getElementById('replayBtn');
+replayBtn.addEventListener('touchstart',(e)=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});},{passive:false});
+replayBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+function conf(count,color){for(let i=0;i<count;i++){const c=document.createElement('div');c.className='cp';c.style.cssText=`left:${Math.random()*100}vw;top:0;background:${color};width:${Math.random()*7+3}px;height:${Math.random()*7+3}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${(Math.random()*1.5+1).toFixed(1)}s;animation-delay:${(Math.random()*.4).toFixed(1)}s;`;document.body.appendChild(c);setTimeout(()=>c.remove(),2500);}}
+</script>
+</body>
+</html>

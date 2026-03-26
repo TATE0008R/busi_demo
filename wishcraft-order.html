@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WishCraft — Personalised Birthday Websites</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Dancing+Script:wght@700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --pink:#ff6b9d;--purple:#c77dff;--blue:#4db8ff;--gold:#d4af37;
+  --bg:#09080f;--card:#ffffff08;--border:#ffffff15;--text:#f0eaff;--textdim:#8a7aaa;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',serif;overflow-x:hidden;}
+.bg-glow{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(255,107,157,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(199,125,255,0.06) 0%,transparent 60%);}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.star{position:absolute;border-radius:50%;background:white;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.05;}to{opacity:0.7;}}
+.page{position:relative;z-index:10;max-width:700px;margin:0 auto;padding:0 16px 80px;}
+
+/* HEADER */
+.header{text-align:center;padding:48px 20px 36px;}
+.logo-name{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,8vw,3.5rem);font-style:italic;background:linear-gradient(135deg,var(--pink),var(--purple),var(--pink));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:logoShimmer 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,107,157,0.3));}
+@keyframes logoShimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.logo-tagline{font-size:0.85rem;color:var(--textdim);letter-spacing:0.2em;text-transform:uppercase;margin-top:6px;}
+.header-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--pink),var(--purple));margin:16px auto 0;border-radius:2px;}
+
+/* STEPS */
+.step-wrap{margin-bottom:32px;}
+.step-label{display:inline-flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--pink);margin-bottom:12px;}
+.step-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));color:white;font-size:0.7rem;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-weight:600;}
+.step-title{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,4vw,1.5rem);color:var(--text);margin-bottom:4px;font-style:italic;}
+.step-hint{font-size:0.85rem;color:var(--textdim);font-style:italic;margin-bottom:16px;}
+
+/* TEMPLATE CARDS */
+.template-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.template-card{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:20px 16px;cursor:pointer;transition:all 0.3s;text-align:center;position:relative;overflow:hidden;}
+.template-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background 0.3s;}
+.template-card.selected{border-color:var(--pink);box-shadow:0 0 24px rgba(255,107,157,0.2);}
+.template-card.selected::before{background:linear-gradient(90deg,var(--pink),var(--purple));}
+.template-card.sel-galaxy{border-color:var(--blue);box-shadow:0 0 24px rgba(77,184,255,0.2);}
+.template-card.sel-galaxy::before{background:linear-gradient(90deg,var(--blue),#0066ff);}
+.template-icon{font-size:2.8rem;display:block;margin-bottom:10px;}
+.template-name{font-family:'Cinzel',serif;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);}
+.template-desc{font-size:0.78rem;color:var(--textdim);margin-top:4px;font-style:italic;}
+.template-price{margin-top:10px;font-family:'Cinzel',serif;font-size:0.8rem;color:var(--pink);}
+
+/* INPUTS */
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.input-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.input-group label{font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--textdim);font-family:'Cinzel',serif;}
+.input-group input,.input-group select,.input-group textarea{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:1rem;outline:none;transition:border 0.2s,box-shadow 0.2s;width:100%;}
+.input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(255,107,157,0.2);}
+.input-group textarea{resize:vertical;min-height:110px;line-height:1.6;}
+.input-group select option{background:#1a0a2e;color:white;}
+
+/* THEME CARDS */
+.theme-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.theme-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:10px;}
+.theme-card.selected{border-color:var(--pink);box-shadow:0 0 16px rgba(255,107,157,0.15);}
+.theme-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;}
+.theme-info{flex:1;}
+.theme-name-txt{font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);}
+.theme-colors-txt{font-size:0.72rem;color:var(--textdim);margin-top:2px;}
+.theme-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all 0.2s;flex-shrink:0;}
+.theme-card.selected .theme-check{background:var(--pink);border-color:var(--pink);}
+
+/* BALLOON INPUTS */
+.balloon-inputs{display:flex;flex-direction:column;gap:10px;}
+.balloon-row{display:flex;align-items:center;gap:10px;}
+.balloon-emoji{font-size:1.6rem;}
+.balloon-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:0.95rem;outline:none;transition:border 0.2s;}
+.balloon-input:focus{border-color:var(--pink);}
+
+/* CODE */
+.code-row{display:flex;gap:10px;}
+.code-box{width:55px;height:60px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-family:'Cinzel',serif;font-size:1.6rem;color:var(--pink);text-align:center;outline:none;transition:border 0.2s,box-shadow 0.2s;}
+.code-box:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(255,107,157,0.2);}
+
+/* PACKAGES */
+.pkg-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.pkg-card.selected{border-color:var(--pink);box-shadow:0 0 20px rgba(255,107,157,0.15);}
+.pkg-icon{font-size:1.6rem;flex-shrink:0;}
+.pkg-info{flex:1;}
+.pkg-name{font-family:'Cinzel',serif;font-size:0.85rem;letter-spacing:0.06em;color:var(--text);}
+.pkg-desc{font-size:0.78rem;color:var(--textdim);margin-top:3px;line-height:1.4;}
+.pkg-price{font-family:'Cinzel',serif;font-size:1rem;color:var(--pink);}
+.pkg-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.65rem;transition:all 0.2s;flex-shrink:0;}
+.pkg-card.selected .pkg-check{background:var(--pink);border-color:var(--pink);}
+
+/* CUSTOM */
+.custom-card{background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(199,125,255,0.06));border:1px solid rgba(212,175,55,0.25);border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all 0.3s;margin-top:8px;}
+.custom-card.selected{border-color:var(--gold);box-shadow:0 0 24px rgba(212,175,55,0.2);}
+.custom-icon{font-size:2.2rem;}
+.custom-info{flex:1;}
+.custom-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);font-style:italic;}
+.custom-desc{font-size:0.82rem;color:var(--textdim);margin-top:4px;line-height:1.5;}
+.custom-price{font-family:'Cinzel',serif;font-size:0.82rem;color:var(--gold);margin-top:5px;}
+.custom-toggle{width:22px;height:22px;border-radius:50%;border:2px solid rgba(212,175,55,0.4);display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;}
+.custom-card.selected .custom-toggle{background:var(--gold);border-color:var(--gold);}
+
+/* PREVIEW BUTTON */
+.preview-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--pink),var(--purple));color:white;border:none;border-radius:16px;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 24px rgba(255,107,157,0.35);margin-top:8px;}
+.preview-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,107,157,0.5);}
+
+.section-divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:32px 0;}
+.music-preview-btn{width:28px;height:28px;border-radius:50%;background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.3);color:var(--pink);font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+.music-preview-btn:hover{background:rgba(255,107,157,0.2);}
+.music-preview-btn.playing{background:rgba(255,107,157,0.2);border-color:var(--pink);animation:musicPulse 0.8s ease-in-out infinite alternate;}
+@keyframes musicPulse{from{box-shadow:0 0 0 0 rgba(255,107,157,0.4);}to{box-shadow:0 0 0 6px rgba(255,107,157,0);}}
+.error-msg{font-size:0.75rem;color:#ff6b6b;margin-top:4px;font-style:italic;display:none;}
+.input-error{border-color:#ff4444!important;}
+
+/* FOOTER */
+.footer{text-align:center;padding:32px 20px;border-top:1px solid var(--border);margin-top:48px;}
+.footer-name{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--pink);}
+.footer-sub{font-size:0.78rem;color:var(--textdim);margin-top:4px;letter-spacing:0.1em;}
+
+/* ══════════════════
+   PREVIEW FULLSCREEN
+══════════════════ */
+.preview-screen{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:2000;display:none;flex-direction:column;
+  background:#000;
+}
+.preview-screen.show{display:flex;}
+
+.preview-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  background:rgba(0,0,0,0.9);
+  border-bottom:1px solid rgba(255,107,157,0.2);
+  flex-shrink:0;
+  z-index:10;
+}
+.preview-topbar-title{font-family:'Cinzel',serif;font-size:0.82rem;letter-spacing:0.12em;color:var(--pink);}
+.preview-close-btn{background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.3);color:var(--pink);border-radius:50px;padding:6px 16px;font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.08em;cursor:pointer;}
+
+.preview-iframe-wrap{flex:1;position:relative;overflow:hidden;}
+.preview-iframe{width:100%;height:100%;border:none;display:block;}
+
+.preview-loading{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#09080f;gap:16px;
+  transition:opacity 0.5s;
+}
+.preview-loading.hide{opacity:0;pointer-events:none;}
+.loading-spinner{width:40px;height:40px;border:3px solid rgba(255,107,157,0.2);border-top-color:var(--pink);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.15em;color:var(--pink);animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+
+.preview-bottombar{
+  padding:12px 16px;
+  background:rgba(0,0,0,0.92);
+  border-top:1px solid rgba(255,107,157,0.2);
+  display:flex;gap:10px;
+  flex-shrink:0;
+}
+.order-now-btn{flex:1;padding:14px;background:linear-gradient(135deg,var(--pink),var(--purple));color:white;border:none;border-radius:12px;font-family:'Cinzel',serif;font-size:0.88rem;letter-spacing:0.08em;cursor:pointer;box-shadow:0 4px 16px rgba(255,107,157,0.35);}
+.edit-btn{padding:14px 18px;background:rgba(255,255,255,0.06);color:var(--textdim);border:1px solid var(--border);border-radius:12px;font-family:'Cinzel',serif;font-size:0.82rem;cursor:pointer;}
+
+/* ══════════════════
+   ORDER MODAL
+══════════════════ */
+.order-modal{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);
+  z-index:3000;display:none;align-items:flex-end;justify-content:center;
+  padding:0;
+}
+.order-modal.show{display:flex;}
+.order-modal-box{
+  width:100%;max-width:600px;
+  background:#0d0818;
+  border:1px solid rgba(255,107,157,0.2);
+  border-radius:24px 24px 0 0;
+  padding:28px 20px 40px;
+  animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  max-height:90vh;overflow-y:auto;
+}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+
+.om-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;}
+.om-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-style:italic;color:var(--text);margin-bottom:4px;}
+.om-sub{font-size:0.85rem;color:var(--textdim);margin-bottom:20px;}
+
+/* Summary box */
+.summary-box{background:#000;border:1px solid rgba(255,107,157,0.2);border-radius:12px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:rgba(255,255,255,0.75);line-height:1.9;white-space:pre-line;margin-bottom:16px;}
+
+/* Payment */
+.pay-section{background:rgba(77,184,255,0.05);border:1px solid rgba(77,184,255,0.15);border-radius:16px;padding:16px;margin-bottom:14px;}
+.pay-title{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:#4db8ff;margin-bottom:12px;}
+.pay-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.pay-step:last-child{margin-bottom:0;}
+.ps-n{width:22px;height:22px;border-radius:50%;background:rgba(77,184,255,0.15);border:1px solid rgba(77,184,255,0.3);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:0.65rem;color:#4db8ff;flex-shrink:0;}
+.ps-t{font-size:0.85rem;color:var(--text);line-height:1.5;padding-top:2px;}
+.ps-t strong{color:#4db8ff;}
+
+.upi-copy{background:rgba(0,0,0,0.3);border:1px solid rgba(77,184,255,0.2);border-radius:10px;padding:10px 14px;font-family:'Cinzel',serif;font-size:0.88rem;color:#4db8ff;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-top:8px;}
+.upi-copy-hint{font-size:0.68rem;color:rgba(77,184,255,0.4);}
+
+.insta-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(199,125,255,0.08));border:1px solid rgba(255,107,157,0.25);border-radius:12px;text-decoration:none;transition:all 0.2s;margin-top:10px;}
+.insta-btn:hover{border-color:var(--pink);}
+.insta-handle{font-family:'Cinzel',serif;font-size:0.9rem;color:var(--pink);letter-spacing:0.04em;}
+.insta-sub{font-size:0.72rem;color:var(--textdim);margin-top:2px;}
+
+.om-actions{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.copy-summary-btn{width:100%;padding:13px;background:rgba(255,107,157,0.1);color:var(--pink);border:1px solid rgba(255,107,157,0.25);border-radius:12px;font-family:'Cinzel',serif;font-size:0.82rem;letter-spacing:0.08em;cursor:pointer;}
+.om-close-btn{width:100%;padding:12px;background:none;color:var(--textdim);border:1px solid var(--border);border-radius:12px;font-family:'Cinzel',serif;font-size:0.8rem;cursor:pointer;}
+
+/* CUSTOM MODAL */
+.custom-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;}
+.custom-modal.show{display:flex;}
+.custom-modal-box{background:#0d0818;border:1px solid rgba(212,175,55,0.3);border-radius:24px;padding:32px 24px;max-width:420px;width:100%;text-align:center;animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.cm-icon{font-size:3rem;display:block;margin-bottom:12px;}
+.cm-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-style:italic;color:var(--gold);margin-bottom:8px;}
+.cm-desc{font-size:0.92rem;color:var(--textdim);line-height:1.7;margin-bottom:22px;}
+.cm-insta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:linear-gradient(135deg,var(--pink),var(--purple));color:white;border:none;border-radius:12px;font-family:'Cinzel',serif;font-size:0.88rem;letter-spacing:0.08em;cursor:pointer;text-decoration:none;margin-bottom:10px;}
+.cm-close{width:100%;padding:11px;background:none;color:var(--textdim);border:1px solid var(--border);border-radius:12px;font-family:'Cinzel',serif;font-size:0.8rem;cursor:pointer;}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(77,184,255,0.15);border:1px solid rgba(77,184,255,0.4);border-radius:50px;padding:10px 24px;font-family:'Cinzel',serif;font-size:0.78rem;color:#4db8ff;z-index:9999;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="stars" id="stars"></div>
+<div class="toast" id="toast">📋 Copied!</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-name">WishCraft ✨</div>
+    <div class="logo-tagline">Personalised Birthday Websites</div>
+    <div class="header-divider"></div>
+    <p style="font-size:0.95rem;color:var(--textdim);margin-top:16px;font-style:italic;line-height:1.6;">Fill in the details, see a live preview of the actual website, then place your order 💕</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 1: TEMPLATE -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">1</div> Choose Your Template</div>
+    <div class="step-title">Which style do you love?</div>
+    <div class="step-hint">Each template is a completely different experience</div>
+    <div class="template-cards" style="grid-template-columns:1fr 1fr;">
+      <div class="template-card selected" id="tpl-moonlit" onclick="selectTemplate('moonlit-garden-template')">
+        <span class="template-icon">🌙</span>
+        <div class="template-name">Moonlit Garden</div>
+        <div class="template-desc">Lavender, fireflies, moonlight</div>
+        <div class="template-price">₹149</div>
+      </div>
+      <div class="template-card" id="tpl-galaxy" onclick="selectTemplate('galaxy-template')">
+        <span class="template-icon">🌌</span>
+        <div class="template-name">Galaxy</div>
+        <div class="template-desc">Deep space, cosmic, adventurous</div>
+        <div class="template-price">₹149</div>
+      </div>
+      <div class="template-card" id="tpl-story" onclick="selectTemplate('story-template')">
+        <span class="template-icon">📖</span>
+        <div class="template-name">Story Mode</div>
+        <div class="template-desc">Cozy book, page by page</div>
+        <div class="template-price">₹149</div>
+      </div>
+      <div class="template-card" id="tpl-bottle" onclick="selectTemplate('bottle-template')">
+        <span class="template-icon">🍾</span>
+        <div class="template-name">Bottle</div>
+        <div class="template-desc">Starry night shore, ocean vibes</div>
+        <div class="template-price">₹149</div>
+      </div>
+      <div class="template-card" id="tpl-potion" onclick="selectTemplate('potion-template')">
+        <span class="template-icon">🧪</span>
+        <div class="template-name">Magic Potion</div>
+        <div class="template-desc">Enchanted forest, brew magic</div>
+        <div class="template-price">₹149</div>
+      </div>
+      <div class="template-card" id="tpl-capsule" onclick="selectTemplate('capsule-template')">
+        <span class="template-icon">⏳</span>
+        <div class="template-name">Time Capsule</div>
+        <div class="template-desc">Rustic vintage, sealed wishes</div>
+        <div class="template-price">₹149</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 2: DETAILS -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">2</div> Basic Details</div>
+    <div class="step-title">Tell us about the birthday person</div>
+    <div class="input-group">
+      <label>Their Name *</label>
+      <input type="text" id="inp-name" placeholder="e.g. Priya" maxlength="20"/>
+      <span class="error-msg" id="err-name">Please enter a name</span>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Birthday Day *</label>
+        <input type="number" id="inp-day" placeholder="e.g. 19" min="1" max="31"/>
+        <span class="error-msg" id="err-day">Enter day (1–31)</span>
+      </div>
+      <div class="input-group">
+        <label>Birthday Month *</label>
+        <select id="inp-month">
+          <option value="">Select month</option>
+          <option value="1">January</option><option value="2">February</option>
+          <option value="3">March</option><option value="4">April</option>
+          <option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option>
+          <option value="9">September</option><option value="10">October</option>
+          <option value="11">November</option><option value="12">December</option>
+        </select>
+        <span class="error-msg" id="err-month">Select a month</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 3: THEME -->
+  <div class="step-wrap" id="theme-step">
+    <div class="step-label"><div class="step-num">3</div> Pick a Colour Theme</div>
+    <div class="step-title">What's the vibe?</div>
+    <div class="step-hint" id="theme-hint">Choose a colour theme for your template</div>
+    <div class="theme-cards" id="themeCards"></div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 4: BALLOONS -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">4</div> Balloon Messages</div>
+    <div class="step-title">What's inside the balloons? 🎈</div>
+    <div class="step-hint">Leave blank to use our beautiful defaults</div>
+    <div class="balloon-inputs">
+      <div class="balloon-row"><span class="balloon-emoji">🎈</span><input class="balloon-input" id="bal1" placeholder="e.g. You make every day brighter 🌟" maxlength="60"/></div>
+      <div class="balloon-row"><span class="balloon-emoji">🎈</span><input class="balloon-input" id="bal2" placeholder="e.g. You are one in a million 💫" maxlength="60"/></div>
+      <div class="balloon-row"><span class="balloon-emoji">🎈</span><input class="balloon-input" id="bal3" placeholder="e.g. Your smile lights up the room 🌸" maxlength="60"/></div>
+      <div class="balloon-row"><span class="balloon-emoji">🎈</span><input class="balloon-input" id="bal4" placeholder="e.g. The world is lucky to have you 💕" maxlength="60"/></div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 5: LETTER -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">5</div> The Letter</div>
+    <div class="step-title">Your message from the heart 💌</div>
+    <div class="step-hint">This appears inside the envelope. Write whatever you feel.</div>
+    <div class="input-group">
+      <label>Your Message *</label>
+      <textarea id="inp-letter" placeholder="Write your heartfelt message here...&#10;&#10;e.g. Happy Birthday! You mean the world to me and I'm so grateful you're in my life. 💕"></textarea>
+      <span class="error-msg" id="err-letter">Please write a message</span>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 6: SECRET CODE -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">6</div> Secret Code 🔐</div>
+    <div class="step-title">Set a 4-digit unlock code</div>
+    <div class="step-hint">Whisper this to them in person — they enter it to unlock the letter!</div>
+    <div class="code-row">
+      <input class="code-box" maxlength="1" type="tel" id="c0"/>
+      <input class="code-box" maxlength="1" type="tel" id="c1"/>
+      <input class="code-box" maxlength="1" type="tel" id="c2"/>
+      <input class="code-box" maxlength="1" type="tel" id="c3"/>
+    </div>
+    <span class="error-msg" id="err-code">Please enter a 4-digit code</span>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 7: PACKAGE -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">7</div> Choose Your Package</div>
+    <div class="step-title">Pick what works for you</div>
+
+    <div class="pkg-card selected" id="pkg-standard" onclick="selectPackage('standard')">
+      <div class="pkg-icon">✨</div>
+      <div class="pkg-info">
+        <div class="pkg-name">Standard</div>
+        <div class="pkg-desc">Any template + Name + Date + Custom messages + Secret code letter + All interactive features</div>
+      </div>
+      <div class="pkg-price">₹149</div>
+      <div class="pkg-check" id="chk-standard">✓</div>
+    </div>
+
+    <div class="pkg-card" id="pkg-custom" onclick="window.location.href='wishcraft-custom.html'" style="cursor:pointer;">
+      <div class="pkg-icon">👑</div>
+      <div class="pkg-info">
+        <div class="pkg-name">Custom</div>
+        <div class="pkg-desc">Standard + Unique design built from scratch + Extra animations + Something nobody else has ✨</div>
+      </div>
+      <div class="pkg-price">₹299</div>
+      <div class="pkg-check" style="border-color:rgba(212,175,55,0.4);">→</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- STEP 8: MUSIC -->
+  <div class="step-wrap">
+    <div class="step-label"><div class="step-num">8</div> Choose Background Music 🎵</div>
+    <div class="step-title">What should play on the website?</div>
+    <div class="step-hint">Tap ▶ to preview · Tap again to stop · Tap the card to select</div>
+
+    <div class="theme-cards" id="musicCards">
+      <div class="theme-card selected" id="music-piano">
+        <div class="theme-dot" style="background:linear-gradient(135deg,#ff9ab0,#c77dff);font-size:1.3rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;">🎹</div>
+        <div class="theme-info" onclick="selectMusic('piano')" style="cursor:pointer;flex:1;">
+          <div class="theme-name-txt">Piano</div>
+          <div class="theme-colors-txt">Soft · Classic · Warm</div>
+        </div>
+        <button class="music-preview-btn" id="prev-piano" onclick="togglePreview('piano',event)">▶</button>
+        <div class="theme-check" id="mchk-piano">✓</div>
+      </div>
+      <div class="theme-card" id="music-rock">
+        <div class="theme-dot" style="background:linear-gradient(135deg,#ff6b35,#e0001a);font-size:1.3rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;">🎸</div>
+        <div class="theme-info" onclick="selectMusic('rock')" style="cursor:pointer;flex:1;">
+          <div class="theme-name-txt">Rock</div>
+          <div class="theme-colors-txt">Energetic · Upbeat · Fun</div>
+        </div>
+        <button class="music-preview-btn" id="prev-rock" onclick="togglePreview('rock',event)">▶</button>
+        <div class="theme-check" id="mchk-rock"></div>
+      </div>
+      <div class="theme-card" id="music-orchestral">
+        <div class="theme-dot" style="background:linear-gradient(135deg,#d4af37,#8b6914);font-size:1.3rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;">🎻</div>
+        <div class="theme-info" onclick="selectMusic('orchestral')" style="cursor:pointer;flex:1;">
+          <div class="theme-name-txt">Orchestral</div>
+          <div class="theme-colors-txt">Grand · Cinematic · Emotional</div>
+        </div>
+        <button class="music-preview-btn" id="prev-orchestral" onclick="togglePreview('orchestral',event)">▶</button>
+        <div class="theme-check" id="mchk-orchestral"></div>
+      </div>
+      <div class="theme-card" id="music-jazz">
+        <div class="theme-dot" style="background:linear-gradient(135deg,#ffd700,#ff8c00);font-size:1.3rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;">🎺</div>
+        <div class="theme-info" onclick="selectMusic('jazz')" style="cursor:pointer;flex:1;">
+          <div class="theme-name-txt">Jazz</div>
+          <div class="theme-colors-txt">Warm · Playful · Unique</div>
+        </div>
+        <button class="music-preview-btn" id="prev-jazz" onclick="togglePreview('jazz',event)">▶</button>
+        <div class="theme-check" id="mchk-jazz"></div>
+      </div>
+      <div class="theme-card" id="music-lofi">
+        <div class="theme-dot" style="background:linear-gradient(135deg,#4db8ff,#7b2fff);font-size:1.3rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;">🎧</div>
+        <div class="theme-info" onclick="selectMusic('lofi')" style="cursor:pointer;flex:1;">
+          <div class="theme-name-txt">Lo-fi</div>
+          <div class="theme-colors-txt">Chill · Soft · Modern</div>
+        </div>
+        <button class="music-preview-btn" id="prev-lofi" onclick="togglePreview('lofi',event)">▶</button>
+        <div class="theme-check" id="mchk-lofi"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW BUTTON -->
+  <button class="preview-btn" onclick="showPreview()">👁️ Preview My Website</button>
+
+</div>
+
+<div class="footer">
+  <div class="footer-name">WishCraft ✨</div>
+  <div class="footer-sub">Made with love · @digitalwishes.in</div>
+</div>
+
+<!-- ══ FULL SCREEN PREVIEW ══ -->
+<div class="preview-screen" id="previewScreen">
+  <div class="preview-topbar">
+    <div class="preview-topbar-title">✨ LIVE PREVIEW</div>
+    <button class="preview-close-btn" onclick="closePreview()">✕ Close</button>
+  </div>
+  <div class="preview-iframe-wrap">
+    <div class="preview-loading" id="previewLoading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">BUILDING YOUR WEBSITE...</div>
+    </div>
+    <iframe class="preview-iframe" id="previewIframe" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+  <div class="preview-bottombar">
+    <button class="edit-btn" onclick="closePreview()">← Edit</button>
+    <button class="order-now-btn" onclick="showOrderModal()">🎉 Order Now</button>
+  </div>
+</div>
+
+<!-- ══ ORDER MODAL ══ -->
+<div class="order-modal" id="orderModal">
+  <div class="order-modal-box">
+    <div class="om-handle"></div>
+    <div class="om-title">Place Your Order 🎉</div>
+    <div class="om-sub">Screenshot or copy the summary below and send it to us!</div>
+
+    <div class="summary-box" id="summaryBox"></div>
+
+    <div class="pay-section">
+      <div class="pay-title">How to complete your order</div>
+      <div class="pay-step"><div class="ps-n">1</div><div class="ps-t">Screenshot the order summary above 📸</div></div>
+      <div class="pay-step"><div class="ps-n">2</div><div class="ps-t">Pay via UPI below</div></div>
+      <div class="upi-copy" onclick="copyUPI()" id="upiBox">
+        <span id="upiText">wishcraft@upi</span>
+        <span class="upi-copy-hint">Tap to copy 📋</span>
+      </div>
+      <div class="pay-step" style="margin-top:12px;"><div class="ps-n">3</div><div class="ps-t">DM us on Instagram with payment screenshot + order summary. We'll deliver within <strong>2 hours!</strong> 🚀</div></div>
+      <a class="insta-btn" href="https://instagram.com/digitalwishes.in" target="_blank">
+        <span style="font-size:1.5rem;">📸</span>
+        <div><div class="insta-handle">@digitalwishes.in</div><div class="insta-sub">Tap to open · We reply fast!</div></div>
+        <span style="color:var(--pink);margin-left:auto;">→</span>
+      </a>
+    </div>
+
+    <div class="om-actions">
+      <button class="copy-summary-btn" onclick="copySummary()">📋 Copy Order Summary</button>
+      <button class="om-close-btn" onclick="closeOrderModal()">← Go back</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CUSTOM MODAL ══ -->
+<div class="custom-modal" id="customModal">
+  <div class="custom-modal-box">
+    <span class="cm-icon">✨</span>
+    <div class="cm-title">Custom Order</div>
+    <div class="cm-desc">You want something truly one-of-a-kind!<br>DM us on Instagram and let's build something nobody else has. ✨</div>
+    <a class="cm-insta" href="https://instagram.com/digitalwishes.in" target="_blank"><span>📸</span> DM @digitalwishes.in</a>
+    <button class="cm-close" onclick="closeCustomModal()">← Go back</button>
+  </div>
+</div>
+
+<script>
+const UPI_ID = 'wishcraft@upi'; // ← Change to your actual UPI ID
+
+// ── MUSIC PREVIEW ENGINE ──
+let previewCtx=null,previewSources=[],previewPlaying=null,previewTimeout=null;
+function getPreviewCtx(){try{if(!previewCtx)previewCtx=new(window.AudioContext||window.webkitAudioContext)();if(previewCtx.state==='suspended')previewCtx.resume();return previewCtx;}catch(e){return null;}}
+function stopPreview(){
+  previewSources.forEach(s=>{try{s.stop();}catch(e){}});
+  previewSources=[];
+  if(previewTimeout){clearTimeout(previewTimeout);previewTimeout=null;}
+  // Reset all play buttons
+  document.querySelectorAll('.music-preview-btn').forEach(b=>{b.textContent='▶';b.classList.remove('playing');});
+  previewPlaying=null;
+}
+function playPreviewNote(ctx,dest,freq,start,dur,type='triangle',vol=0.35,attack=0.05,decay=0.2){
+  try{
+    const osc=ctx.createOscillator();const g=ctx.createGain();
+    osc.type=type;osc.frequency.value=freq;
+    g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(vol,start+attack);
+    g.gain.exponentialRampToValueAtTime(vol*0.4,start+decay);g.gain.exponentialRampToValueAtTime(0.001,start+dur);
+    osc.connect(g);g.connect(dest);osc.start(start);osc.stop(start+dur+0.1);
+    previewSources.push(osc);
+  }catch(e){}
+}
+function makePreviewReverb(ctx,secs=1.5){
+  try{const conv=ctx.createConvolver();const len=ctx.sampleRate*secs;const buf=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);}conv.buffer=buf;return conv;}catch(e){return null;}
+}
+const C4=261.63,D4=293.66,E4=329.63,F4=349.23,G4=392,A4=440,B4=493.88,C5=523.25,D5=587.33,E5=659.25,F5=698.46,G5=783.99;
+const HB=[[G4,0,.75],[G4,.75,.25],[A4,1,1],[G4,2,1],[C5,3,1],[B4,4,2],[G4,6,.75],[G4,6.75,.25],[A4,7,1],[G4,8,1],[D5,9,1],[C5,10,2],[G4,12,.75],[G4,12.75,.25],[G5,13,1],[E5,14,1],[C5,15,.75],[B4,15.75,.25],[A4,16,2],[F5,18,.75],[F5,18.75,.25],[E5,19,1],[C5,20,1],[D5,21,1],[C5,22,3]];
+
+const PREVIEW_SONGS={
+  piano(ctx,master){const rev=makePreviewReverb(ctx,2);if(rev)rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.3;if(rev)rg.connect(rev);const B=60/130;HB.forEach(([f,t,d])=>{playPreviewNote(ctx,master,f,ctx.currentTime+0.1+t*B,d*B*0.9,'triangle',0.35,0.05,0.2);if(rev)playPreviewNote(ctx,rg,f*2.005,ctx.currentTime+0.1+t*B,d*B*0.9,'sine',0.1,0.05,0.2);});return 25*B;},
+  rock(ctx,master){const B=60/180;HB.forEach(([f,t,d])=>{playPreviewNote(ctx,master,f,ctx.currentTime+0.1+t*B,d*B*0.85,'sawtooth',0.3,0.01,0.05);});return 25*B;},
+  orchestral(ctx,master){
+    const rev=makePreviewReverb(ctx,3);
+    const dest=rev?(rev.connect(master),rev):master;
+    const B=60/100;
+    HB.forEach(([f,t,d])=>{
+      // Always play to master for audibility
+      playPreviewNote(ctx,master,f,ctx.currentTime+0.1+t*B,d*B*0.95,'sawtooth',0.12,0.08,0.3);
+      // Extra detuned layers through reverb
+      [-0.02,0.02].forEach(dt=>{
+        playPreviewNote(ctx,dest,f*(1+dt),ctx.currentTime+0.1+t*B,d*B*0.95,'sawtooth',0.05,0.08,0.3);
+      });
+    });
+    return 25*B;
+  },
+  jazz(ctx,master){const B=60/145;HB.forEach(([f,t,d])=>{playPreviewNote(ctx,master,f,ctx.currentTime+0.1+t*B,d*B*0.8,'square',0.22,0.03,0.08);});return 25*B;},
+  lofi(ctx,master){
+    const rev=makePreviewReverb(ctx,2.5);
+    const dest=rev?(rev.connect(master),rev):master;
+    const B=60/90;
+    HB.forEach(([f,t,d])=>{
+      // Always play to master so it's audible
+      playPreviewNote(ctx,master,f,ctx.currentTime+0.1+t*B,d*B*1.1,'sine',0.28,0.08,0.4);
+      // Bass layer through reverb
+      playPreviewNote(ctx,dest,f*0.5,ctx.currentTime+0.1+t*B,d*B*1.2,'sine',0.08,0.1,0.5);
+    });
+    return 25*B;
+  },
+};
+
+function togglePreview(songKey, e){
+  if(e) e.stopPropagation();
+  const btn=document.getElementById('prev-'+songKey);
+  // If this song is already playing — stop it
+  if(previewPlaying===songKey){stopPreview();return;}
+  // Stop any currently playing preview
+  stopPreview();
+  // Start new preview
+  try{
+    const ctx=getPreviewCtx();if(!ctx)return;
+    const master=ctx.createGain();master.gain.value=0.07;master.connect(ctx.destination);
+    const playFn=PREVIEW_SONGS[songKey];if(!playFn)return;
+    const dur=playFn(ctx,master);
+    previewPlaying=songKey;
+    btn.textContent='■';btn.classList.add('playing');
+    // Auto stop after one play
+    previewTimeout=setTimeout(()=>{stopPreview();},dur*1000+500);
+  }catch(e2){console.error(e2);}
+}
+const starsEl=document.getElementById('stars');
+for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*1.5+0.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;`;starsEl.appendChild(s);}
+
+// ── STATE ──
+let selTemplate='moonlit-garden-template', selTheme='pink', selPackage='standard', selMusic='piano', isCustom=false;
+const MONTHS=['','January','February','March','April','May','June','July','August','September','October','November','December'];
+const PKG={standard:{name:'Standard',price:149},custom:{name:'Custom',price:299}};
+const THEME_NAMES={pink:'Pink & Purple',gold:'Gold & Green',blue:'Blue & Silver',peach:'Peach & Rose'};
+const TEMPLATE_IDS=['moonlit','galaxy','story','bottle','potion','capsule'];
+
+// ── PER TEMPLATE THEMES ──
+const TEMPLATE_THEMES = {
+  'moonlit-garden-template': [
+    { key:'lavender', name:'Lavender & Moon',  desc:'Dreamy · Soft',    dot:'linear-gradient(135deg,#c8b4ff,#a090e0)' },
+    { key:'rose',     name:'Rose & Blush',     desc:'Romantic · Warm',  dot:'linear-gradient(135deg,#ff9ab0,#e05070)' },
+    { key:'teal',     name:'Teal & Sage',      desc:'Calm · Nature',    dot:'linear-gradient(135deg,#5dddc8,#2aaa90)' },
+    { key:'gold',     name:'Gold & Ivory',     desc:'Luxury · Elegant', dot:'linear-gradient(135deg,#d4af37,#a07820)' },
+  ],
+  'galaxy-template': [
+    { key:'blue',    name:'Deep Blue & Silver', desc:'Classic · Space',  dot:'linear-gradient(135deg,#4db8ff,#0066ff)' },
+    { key:'purple',  name:'Purple Nebula',      desc:'Mystical · Bold',  dot:'linear-gradient(135deg,#c77dff,#7b2fff)' },
+    { key:'emerald', name:'Emerald Space',      desc:'Unique · Fresh',   dot:'linear-gradient(135deg,#00e5a0,#00aa60)' },
+    { key:'red',     name:'Red Dwarf',          desc:'Intense · Fiery',  dot:'linear-gradient(135deg,#ff4466,#cc1133)' },
+  ],
+  'story-template': [
+    { key:'amber',    name:'Warm Amber',      desc:'Cozy · Nostalgic', dot:'linear-gradient(135deg,#c8860a,#f0a830)' },
+    { key:'rose',     name:'Dusty Rose',      desc:'Soft · Feminine',  dot:'linear-gradient(135deg,#c86888,#f0a8b8)' },
+    { key:'forest',   name:'Forest Green',    desc:'Natural · Calm',   dot:'linear-gradient(135deg,#4a9a50,#88cc88)' },
+    { key:'midnight', name:'Midnight Blue',   desc:'Elegant · Dark',   dot:'linear-gradient(135deg,#5588dd,#2244aa)' },
+  ],
+  'bottle-template': [
+    { key:'ocean',   name:'Ocean Blue',      desc:'Classic · Shore',   dot:'linear-gradient(135deg,#64b4ff,#1a6fff)' },
+    { key:'sunset',  name:'Sunset Coral',    desc:'Warm · Vibrant',    dot:'linear-gradient(135deg,#ff8c55,#e04020)' },
+    { key:'deepsea', name:'Deep Sea Teal',   desc:'Mysterious · Cool', dot:'linear-gradient(135deg,#22ddc8,#009980)' },
+    { key:'purple',  name:'Starry Purple',   desc:'Dreamy · Night',    dot:'linear-gradient(135deg,#b088ff,#7033ee)' },
+  ],
+  'potion-template': [
+    { key:'forest', name:'Enchanted Green', desc:'Magical · Natural',  dot:'linear-gradient(135deg,#64c864,#2a8a2a)' },
+    { key:'witch',  name:'Witch Purple',    desc:'Dark · Mystical',    dot:'linear-gradient(135deg,#cc88ff,#7700cc)' },
+    { key:'fairy',  name:'Fairy Pink',      desc:'Playful · Sparkly',  dot:'linear-gradient(135deg,#ff88cc,#d4af37)' },
+    { key:'autumn', name:'Autumn Red',      desc:'Warm · Fiery',       dot:'linear-gradient(135deg,#ff8833,#cc3300)' },
+  ],
+  'capsule-template': [
+    { key:'rustic',    name:'Rustic Gold',      desc:'Vintage · Warm',    dot:'linear-gradient(135deg,#c8a050,#8a6010)' },
+    { key:'parchment', name:'Aged Parchment',   desc:'Old · Earthy',      dot:'linear-gradient(135deg,#8a7050,#4a3820)' },
+    { key:'navy',      name:'Vintage Navy',     desc:'Classic · Bold',    dot:'linear-gradient(135deg,#6688cc,#224488)' },
+    { key:'sepia',     name:'Sepia & Burgundy', desc:'Rich · Antique',    dot:'linear-gradient(135deg,#aa6644,#772233)' },
+  ],
+};
+
+function buildThemeCards(templateKey){
+  const themes = TEMPLATE_THEMES[templateKey] || [];
+  const container = document.getElementById('themeCards');
+  container.innerHTML = '';
+  selTheme = themes[0]?.key || '';
+  themes.forEach((theme, i) => {
+    const card = document.createElement('div');
+    card.className = 'theme-card' + (i === 0 ? ' selected' : '');
+    card.id = 'theme-' + theme.key;
+    card.innerHTML = `
+      <div class="theme-dot" style="background:${theme.dot};"></div>
+      <div class="theme-info"><div class="theme-name-txt">${theme.name}</div><div class="theme-colors-txt">${theme.desc}</div></div>
+      <div class="theme-check">${i === 0 ? '✓' : ''}</div>`;
+    card.addEventListener('click', () => selectTheme(theme.key));
+    card.addEventListener('touchstart', (e) => { e.preventDefault(); selectTheme(theme.key); }, {passive:false});
+    container.appendChild(card);
+  });
+}
+function selectTemplate(t){
+  selTemplate=t;
+  TEMPLATE_IDS.forEach(id=>{
+    const el=document.getElementById('tpl-'+id);
+    if(el) el.className='template-card'+(t===id+'-template'||t==='moonlit-garden-template'&&id==='moonlit'?' selected':'');
+  });
+  // Rebuild theme cards for this template
+  const ts=document.getElementById('theme-step');
+  ts.style.opacity='1';
+  ts.style.pointerEvents='all';
+  buildThemeCards(t);
+}
+function selectTheme(t){
+  selTheme=t;
+  document.querySelectorAll('.theme-card').forEach(c=>{c.classList.remove('selected');c.querySelector('.theme-check').textContent='';});
+  const el=document.getElementById('theme-'+t);
+  if(el){el.classList.add('selected');el.querySelector('.theme-check').textContent='✓';}
+}
+
+// Build initial theme cards on load
+buildThemeCards('moonlit-garden-template');
+function selectMusic(m){
+  selMusic=m;
+  ['piano','rock','orchestral','jazz','lofi'].forEach(k=>{
+    const el=document.getElementById('music-'+k);
+    const chk=document.getElementById('mchk-'+k);
+    if(el) el.classList.toggle('selected',k===m);
+    if(chk) chk.textContent=k===m?'✓':'';
+  });
+}
+function selectPackage(p){
+  selPackage=p;
+  ['standard','custom'].forEach(k=>{
+    const el=document.getElementById('pkg-'+k);
+    const chk=document.getElementById('chk-'+k);
+    if(el) el.classList.toggle('selected',k===p);
+    if(chk) chk.textContent=k===p?'✓':'';
+  });
+}
+function toggleCustom(){
+  isCustom=!isCustom;
+  document.getElementById('custom-card').classList.toggle('selected',isCustom);
+  document.getElementById('customToggle').textContent=isCustom?'✓':'';
+  if(isCustom)document.getElementById('customModal').classList.add('show');
+}
+function closeCustomModal(){document.getElementById('customModal').classList.remove('show');}
+
+// ── CODE INPUTS ──
+document.querySelectorAll('.code-box').forEach((inp,i)=>{
+  inp.addEventListener('input',()=>{inp.value=inp.value.slice(-1).replace(/\D/,'');if(inp.value&&i<3)document.querySelectorAll('.code-box')[i+1].focus();});
+  inp.addEventListener('keydown',(e)=>{if(e.key==='Backspace'&&!inp.value&&i>0)document.querySelectorAll('.code-box')[i-1].focus();});
+});
+
+// ── VALIDATE ──
+function validate(){
+  let ok=true;
+  const set=(id,errId,cond)=>{document.getElementById(id).classList.toggle('input-error',!cond);document.getElementById(errId).style.display=cond?'none':'block';if(!cond)ok=false;};
+  set('inp-name','err-name',document.getElementById('inp-name').value.trim().length>0);
+  const day=parseInt(document.getElementById('inp-day').value);
+  set('inp-day','err-day',day>=1&&day<=31);
+  set('inp-month','err-month',document.getElementById('inp-month').value!=='');
+  set('inp-letter','err-letter',document.getElementById('inp-letter').value.trim().length>0);
+  const code=Array.from(document.querySelectorAll('.code-box')).map(d=>d.value).join('');
+  const codeOk=code.length===4;
+  document.querySelectorAll('.code-box').forEach(c=>c.style.borderColor=codeOk?'':'#ff4444');
+  document.getElementById('err-code').style.display=codeOk?'none':'block';
+  if(!codeOk)ok=false;
+  return ok;
+}
+
+// ── BUILD PREVIEW URL ──
+function buildPreviewURL(){
+  const name=document.getElementById('inp-name').value.trim();
+  const day=document.getElementById('inp-day').value;
+  const month=document.getElementById('inp-month').value;
+  const letter=encodeURIComponent(document.getElementById('inp-letter').value.trim());
+  const code=Array.from(document.querySelectorAll('.code-box')).map(d=>d.value).join('');
+  const b1=encodeURIComponent(document.getElementById('bal1').value||'🌟 You bring light to every room you enter.');
+  const b2=encodeURIComponent(document.getElementById('bal2').value||'🌸 Your strength is quiet but absolutely beautiful.');
+  const b3=encodeURIComponent(document.getElementById('bal3').value||'💛 The world is better because you\'re in it.');
+  const b4=encodeURIComponent(document.getElementById('bal4').value||'👑 You were born to shine.');
+
+  const templateFile=selTemplate+'.html';
+
+  const params=`?name=${encodeURIComponent(name)}&day=${day}&month=${month}&theme=${selTheme}&code=${code}&music=${selMusic}&b1=${b1}&b2=${b2}&b3=${b3}&b4=${b4}&letter=${letter}&preview=1`;
+
+  return templateFile+params;
+}
+
+// ── SHOW PREVIEW ──
+function showPreview(){
+  if(!validate())return;
+  document.getElementById('previewScreen').classList.add('show');
+  document.getElementById('previewLoading').classList.remove('hide');
+  document.body.style.overflow='hidden';
+
+  const url=buildPreviewURL();
+  const iframe=document.getElementById('previewIframe');
+  iframe.src=url;
+  iframe.onload=()=>{
+    setTimeout(()=>document.getElementById('previewLoading').classList.add('hide'),600);
+  };
+}
+function closePreview(){
+  document.getElementById('previewScreen').classList.remove('show');
+  document.getElementById('previewIframe').src='';
+  document.body.style.overflow='';
+}
+
+// ── ORDER MODAL ──
+function showOrderModal(){
+  const name=document.getElementById('inp-name').value.trim();
+  const day=document.getElementById('inp-day').value;
+  const month=document.getElementById('inp-month').value;
+  const code=Array.from(document.querySelectorAll('.code-box')).map(d=>d.value).join('');
+  const b1=document.getElementById('bal1').value||'(default)';
+  const b2=document.getElementById('bal2').value||'(default)';
+  const b3=document.getElementById('bal3').value||'(default)';
+  const b4=document.getElementById('bal4').value||'(default)';
+  const letter=document.getElementById('inp-letter').value.trim();
+  const templateLabel={'moonlit-garden-template':'Moonlit Garden 🌙','galaxy-template':'Galaxy 🌌','story-template':'Story Mode 📖','bottle-template':'Message in a Bottle 🍾','potion-template':'Magic Potion 🧪','capsule-template':'Time Capsule ⏳'}[selTemplate]||selTemplate;
+  const musicLabels={piano:'🎹 Piano',rock:'🎸 Rock',orchestral:'🎻 Orchestral',jazz:'🎺 Jazz',lofi:'🎧 Lo-fi'};
+
+  const pkg=PKG[selPackage];
+  const isCustomPkg=selPackage==='custom';
+  const summary=`━━━━━━━━━━━━━━━━━━━━
+🎂 WISHCRAFT ORDER
+━━━━━━━━━━━━━━━━━━━━
+👤 Name: ${name}
+🗓️ Birthday: ${day} ${MONTHS[parseInt(month)]}
+🎨 Template: ${isCustomPkg?'Custom (to discuss)':templateLabel}
+🎵 Music: ${musicLabels[selMusic]||'🎹 Piano'}
+📦 Package: ${pkg.name} — ₹${pkg.price}
+🔐 Secret Code: ${isCustomPkg?'(to discuss)':code}
+━━━━━━━━━━━━━━━━━━━━
+🎈 Messages:
+1. ${b1}
+2. ${b2}
+3. ${b3}
+4. ${b4}
+━━━━━━━━━━━━━━━━━━━━
+💌 Letter:
+${letter.substring(0,150)}${letter.length>150?'...':''}
+━━━━━━━━━━━━━━━━━━━━
+💰 Total: ₹${pkg.price}
+${isCustomPkg?'📩 DM @digitalwishes.in to discuss your custom design!':''}`;
+
+  document.getElementById('summaryBox').textContent=summary;
+  document.getElementById('upiText').textContent=UPI_ID;
+  document.getElementById('orderModal').classList.add('show');
+}
+function closeOrderModal(){document.getElementById('orderModal').classList.remove('show');}
+
+// ── COPY ──
+function copyUPI(){
+  copyToClipboard(UPI_ID, '📋 UPI ID copied!');
+}
+function copySummary(){
+  copyToClipboard(document.getElementById('summaryBox').textContent, '📋 Order summary copied!');
+}
+function copyToClipboard(text, msg){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>toast(msg)).catch(()=>fallbackCopy(text,msg));
+  } else {
+    fallbackCopy(text, msg);
+  }
+}
+function fallbackCopy(text, msg){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');toast(msg);}catch(e){toast('❌ Copy failed — please screenshot instead');}
+  document.body.removeChild(ta);
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+</script>
+</body>
+</html>

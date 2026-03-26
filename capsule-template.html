@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday!</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<script>
+// ╔══════════════════════════════════════════════════════╗
+// ║           ✏️  EDIT ONLY THIS SECTION                 ║
+// ╠══════════════════════════════════════════════════════╣
+
+const NAME           = "Priya";
+const BIRTHDAY_DAY   = 25;
+const BIRTHDAY_MONTH = 6;
+const SECRET_CODE    = "2025";
+
+// MUSIC — pick one: "piano" | "rock" | "orchestral" | "jazz" | "lofi"
+window.MUSIC = "piano"; const MUSIC = window.MUSIC;
+
+// COLOR THEME — pick one:
+// "rustic"  → Rustic Brown & Gold (default)
+// "parchment" → Aged Parchment & Ink
+// "navy"    → Vintage Navy & Brass
+// "sepia"   → Sepia & Burgundy
+const THEME = "rustic";
+
+// SEALED WISHES — revealed one by one from the capsule
+const SEALED_WISHES = [
+  `🌟 "May this year bring you everything you've been quietly hoping for."`,
+  `💛 "May you always know exactly how valued you truly are."`,
+  `🌸 "May your kindness return to you a hundredfold."`,
+  `✨ "May every door that was closed finally swing wide open for you."`,
+  `🎂 "May this birthday mark the beginning of your most beautiful chapter."`,
+];
+
+// LETTER (unlocked by secret code)
+const LETTER = `📜 Sealed for ${NAME} — Opened on her birthday
+
+These words were written with care,
+locked away, and saved for this moment.
+
+Because you deserve a birthday
+that feels like something more than ordinary.
+
+${NAME}, you are the kind of person
+that people carry in their hearts long after they've met you.
+You leave things better than you found them.
+You give without keeping score.
+You show up in ways that matter.
+
+That is rare. That is you.
+
+May this year hold more than you imagined.
+May it be the one where things finally fall
+beautifully into place.
+
+Happy Birthday. 💛
+Sealed with love.`;
+
+// ╚══════════════════════════════════════════════════════╝
+//   DO NOT EDIT ANYTHING BELOW THIS LINE
+// ╚══════════════════════════════════════════════════════╝
+
+const CAPSULE_THEMES = {
+  rustic:   { accent:'#c8a050', accent2:'#8a6010', bg:'#1a1208', letterBg:'linear-gradient(160deg,#f5ead0,#ede0b8)', letterText:'#3a2505', confetti1:'#c8a050', confetti2:'#f0d880' },
+  parchment:{ accent:'#8a7050', accent2:'#4a3820', bg:'#120f08', letterBg:'linear-gradient(160deg,#f5f0e8,#ede8dc)', letterText:'#2a2010', confetti1:'#8a7050', confetti2:'#c8b890' },
+  navy:     { accent:'#6688cc', accent2:'#224488', bg:'#080c18', letterBg:'linear-gradient(160deg,#f0f4ff,#e8ecf8)', letterText:'#0a1440', confetti1:'#6688cc', confetti2:'#99aadd' },
+  sepia:    { accent:'#aa6644', accent2:'#772233', bg:'#120808', letterBg:'linear-gradient(160deg,#fff0e8,#f5e8e0)', letterText:'#2a0a08', confetti1:'#aa6644', confetti2:'#cc9966' },
+};
+const T = CAPSULE_THEMES[THEME] || CAPSULE_THEMES.rustic;
+
+(function(){const p=new URLSearchParams(window.location.search);if(!p.get('preview'))return;if(p.get('name'))window.NAME=p.get('name');if(p.get('day'))window.BIRTHDAY_DAY=parseInt(p.get('day'));if(p.get('month'))window.BIRTHDAY_MONTH=parseInt(p.get('month'));if(p.get('code'))window.SECRET_CODE=p.get('code');if(p.get('music'))window.MUSIC=p.get('music');if(p.get('theme'))Object.assign(T,CAPSULE_THEMES[p.get('theme')]||CAPSULE_THEMES.rustic);if(p.get('letter'))window.LETTER=decodeURIComponent(p.get('letter'));})();
+
+document.title=`Happy Birthday ${NAME}! ⏳`;
+const themeStyle=document.createElement('style');
+themeStyle.textContent=`
+body{background:${T.bg};}
+.dot.active{background:${T.accent};}
+.dot{border-color:${T.accent}44;}
+.scroll-down{color:${T.accent}44;}
+.capsule-name{background:linear-gradient(135deg,${T.accent},${T.accent2},${T.accent});-webkit-background-clip:text;background-clip:text;}
+.stamp,.postmark{border-color:${T.accent}44;color:${T.accent}44;}
+.capsule-wish{border-color:${T.accent}12;}
+.cd-u{border-color:${T.accent}12;}
+.cd-v{color:${T.accent};text-shadow:0 0 20px ${T.accent}44;}
+.bd-show{color:${T.accent};}
+.cd-b.unlocked{background:linear-gradient(135deg,${T.accent2},${T.accent});color:${T.bg};}
+.code-d{border-color:${T.accent}22;color:${T.accent};}
+.code-d:focus{border-color:${T.accent};}
+.aged-paper{background:${T.letterBg};}
+.letter-t{color:${T.letterText};}
+.final-n{background:linear-gradient(135deg,${T.accent},${T.accent2},${T.accent});-webkit-background-clip:text;background-clip:text;}
+.wish-p{border-color:${T.accent}44;color:${T.accent};}
+#audioBtn{border-color:${T.accent}22;color:${T.accent};}
+`;
+document.head.appendChild(themeStyle);
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#1a1208;font-family:'Libre Baskerville',serif;overflow-x:hidden;color:#e8d5a0;}
+
+/* ── RUSTIC BG ── */
+.rust-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,#2a1c08 0%,#1a1208 60%),
+             radial-gradient(ellipse 60% 80% at 80% 80%,#1e1505 0%,transparent 60%);}
+/* Dust particles */
+.dust{position:fixed;border-radius:50%;background:rgba(220,180,100,0.4);pointer-events:none;z-index:1;animation:dustFloat var(--dd) ease-in-out infinite alternate;}
+@keyframes dustFloat{from{transform:translate(0,0);}to{transform:translate(var(--dx),var(--dy));}}
+/* Warm light */
+.warm-light{position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(60px);animation:warmPulse 5s ease-in-out infinite alternate;}
+@keyframes warmPulse{from{opacity:0.15;}to{opacity:0.3;}}
+
+/* ── SECTIONS ── */
+.section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:10;padding:60px 20px;opacity:0;transition:opacity 0.8s;}
+.section.locked-section{display:none;}
+.section.visible{opacity:1;}
+.nav-dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:100;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(200,160,80,0.2);border:1px solid rgba(200,160,80,0.3);cursor:pointer;transition:all 0.3s;}
+.dot.active{background:#c8a050;transform:scale(1.5);}
+.scroll-down{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:rgba(200,160,80,0.3);animation:bounce 2s ease-in-out infinite;margin-top:20px;font-family:'Special Elite',serif;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* ── SEC 1: LANDING ── */
+#sec1{text-align:center;gap:20px;}
+.stamp{display:inline-block;border:3px solid rgba(200,160,80,0.4);border-radius:4px;padding:6px 16px;font-family:'Special Elite',serif;font-size:0.75rem;letter-spacing:0.2em;color:rgba(200,160,80,0.5);text-transform:uppercase;transform:rotate(-2deg);margin-bottom:8px;}
+.capsule-name{font-family:'Dancing Script',cursive;font-size:clamp(3rem,11vw,5.5rem);font-weight:700;background:linear-gradient(135deg,#c8a050,#f0d880,#a08030,#c8a050);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:nameShimmer 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(200,160,80,0.3));}
+@keyframes nameShimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.capsule-sub{font-size:clamp(0.85rem,3vw,1.05rem);color:rgba(220,180,100,0.45);font-style:italic;}
+.postmark{font-family:'Special Elite',serif;font-size:0.7rem;color:rgba(200,160,80,0.25);letter-spacing:0.1em;transform:rotate(3deg);display:inline-block;}
+
+/* ── SEC 2: CAPSULE ── */
+#sec2{gap:24px;text-align:center;}
+#sec2 h2{font-family:'Special Elite',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.15em;color:rgba(200,160,80,0.45);}
+.capsule-chest{font-size:clamp(90px,24vw,140px);line-height:1;animation:chestFloat 4s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px rgba(200,160,80,0.2));cursor:pointer;user-select:none;display:block;}
+@keyframes chestFloat{from{transform:translateY(0) rotate(-3deg);}to{transform:translateY(-12px) rotate(3deg);}}
+.capsule-chest:active{transform:scale(0.93)!important;}
+.capsule-wish{font-family:'Libre Baskerville',serif;font-style:italic;font-size:clamp(0.95rem,3.2vw,1.15rem);color:rgba(220,180,100,0.85);max-width:380px;line-height:1.8;text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center;background:rgba(50,30,5,0.3);border:1px solid rgba(200,160,80,0.12);border-radius:4px;padding:18px 22px;opacity:0;transition:opacity 0.5s;}
+.capsule-wish.show{opacity:1;}
+.wish-count{font-family:'Special Elite',serif;font-size:0.78rem;color:rgba(200,160,80,0.3);letter-spacing:0.1em;}
+.chest-hint{font-size:0.78rem;color:rgba(200,160,80,0.25);letter-spacing:0.1em;font-family:'Special Elite',serif;text-transform:uppercase;}
+
+/* ── SEC 3: COUNTDOWN ── */
+#sec3{gap:24px;text-align:center;}
+#sec3 h2{font-family:'Special Elite',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.15em;color:rgba(200,160,80,0.45);}
+.telegram{background:rgba(30,20,5,0.5);border:1px solid rgba(200,160,80,0.15);border-radius:4px;padding:16px 20px;font-family:'Special Elite',serif;font-size:0.78rem;color:rgba(200,160,80,0.4);letter-spacing:0.1em;text-transform:uppercase;max-width:360px;width:100%;margin-bottom:16px;}
+.cd-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.cd-u{background:rgba(30,20,5,0.4);border:1px solid rgba(200,160,80,0.12);border-radius:4px;padding:16px 18px;min-width:78px;text-align:center;}
+.cd-v{font-family:'Special Elite',serif;font-size:clamp(1.8rem,6vw,2.8rem);color:#c8a050;line-height:1;text-shadow:0 0 20px rgba(200,160,80,0.3);}
+.cd-l{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,160,80,0.3);margin-top:6px;font-family:'Special Elite',serif;}
+.bd-show{display:none;font-family:'Dancing Script',cursive;font-size:1.3rem;color:#c8a050;text-align:center;}
+.bd-show.show{display:block;}
+.cd-b{padding:13px 38px;border-radius:4px;font-family:'Special Elite',serif;font-size:0.88rem;letter-spacing:0.1em;cursor:not-allowed;border:none;transition:all 0.2s;}
+.cd-b.locked{background:rgba(200,160,80,0.05);color:rgba(200,160,80,0.2);border:1px solid rgba(200,160,80,0.1);}
+.cd-b.unlocked{background:linear-gradient(135deg,#5a3a10,#c8a050);color:#1a1208;cursor:pointer;box-shadow:0 4px 20px rgba(200,160,80,0.2);}
+.cd-lk{font-size:0.75rem;color:rgba(200,160,80,0.22);letter-spacing:0.08em;font-family:'Special Elite',serif;}
+.cd-lk.hidden{opacity:0;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.shake{animation:shake 0.3s ease;}
+
+/* ── SEC 4: CODE ── */
+#sec4{gap:24px;text-align:center;}
+#sec4 h2{font-family:'Special Elite',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.15em;color:rgba(200,160,80,0.45);}
+.wax-seal-img{font-size:3rem;animation:sealPulse 2s ease-in-out infinite alternate;}
+@keyframes sealPulse{from{filter:drop-shadow(0 0 8px rgba(200,100,50,0.3));}to{filter:drop-shadow(0 0 20px rgba(200,100,50,0.6));}}
+.code-hint-v{font-size:0.9rem;color:rgba(220,180,100,0.4);font-style:italic;max-width:300px;line-height:1.6;}
+.code-ins{display:flex;gap:10px;justify-content:center;}
+.code-d{width:56px;height:64px;background:rgba(30,20,5,0.4);border:1.5px solid rgba(200,160,80,0.2);border-radius:4px;font-family:'Special Elite',serif;font-size:1.8rem;color:#c8a050;text-align:center;outline:none;transition:border 0.2s;}
+.code-d:focus{border-color:#c8a050;box-shadow:0 0 12px rgba(200,160,80,0.15);}
+.code-d.wrong{border-color:#ff4444;animation:shake 0.3s ease;}
+.code-d.correct{border-color:#44cc44;}
+.code-st{font-size:0.82rem;min-height:22px;font-style:italic;color:rgba(200,160,80,0.3);}
+
+/* ── SEC 5: LETTER ── */
+#sec5{gap:24px;text-align:center;}
+#sec5 h2{font-family:'Special Elite',serif;font-size:clamp(0.85rem,3vw,1.1rem);letter-spacing:0.15em;color:rgba(200,160,80,0.45);}
+.aged-paper{background:linear-gradient(160deg,#f5ead0,#ede0b8);border-radius:2px;padding:28px 22px;max-width:420px;width:100%;text-align:left;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5),4px 4px 0 rgba(100,70,20,0.2);}
+.aged-paper::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(transparent,transparent 27px,rgba(100,70,20,0.08) 28px);pointer-events:none;}
+.aged-paper::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse 80% 80% at 10% 10%,rgba(200,150,80,0.05) 0%,transparent 60%);pointer-events:none;}
+.letter-t{font-family:'Dancing Script',cursive;font-size:clamp(0.9rem,2.5vw,1.1rem);color:#3a2505;line-height:2.1;white-space:pre-line;position:relative;z-index:1;}
+.letter-date{font-family:'Special Elite',serif;font-size:0.72rem;color:rgba(100,70,20,0.4);margin-bottom:12px;display:block;letter-spacing:0.1em;}
+
+/* ── SEC 6: FINAL ── */
+#sec6{gap:24px;text-align:center;}
+.final-stamp{display:inline-block;border:3px solid rgba(200,160,80,0.3);border-radius:4px;padding:6px 16px;font-family:'Special Elite',serif;font-size:0.72rem;letter-spacing:0.18em;color:rgba(200,160,80,0.4);text-transform:uppercase;transform:rotate(-2deg);}
+.final-n{font-family:'Dancing Script',cursive;font-size:clamp(3rem,12vw,5.5rem);font-weight:700;background:linear-gradient(135deg,#c8a050,#f0d880,#a08030,#c8a050);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:nameShimmer 4s ease-in-out infinite;}
+.final-m{font-family:'Libre Baskerville',serif;font-style:italic;font-size:clamp(1rem,3.5vw,1.3rem);color:rgba(220,180,100,0.6);max-width:480px;line-height:1.8;}
+.final-s{font-size:0.72rem;color:rgba(200,160,80,0.22);letter-spacing:0.18em;text-transform:uppercase;font-family:'Special Elite',serif;}
+.replay-b{padding:11px 32px;background:rgba(200,160,80,0.07);color:#c8a050;border:1px solid rgba(200,160,80,0.2);border-radius:4px;font-family:'Special Elite',serif;font-size:0.8rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;}
+.final-ic{font-size:2rem;animation:hp 3s ease-in-out infinite alternate;}
+@keyframes hp{from{transform:scale(1);}to{transform:scale(1.05) rotate(-2deg);}}
+
+/* CONFETTI */
+.cp{position:fixed;pointer-events:none;z-index:9998;animation:cpF linear forwards;}
+@keyframes cpF{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+/* AUDIO */
+#audioBtn{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(200,160,80,0.07);border:1px solid rgba(200,160,80,0.2);border-radius:4px;padding:8px 20px;font-size:0.75rem;color:#c8a050;z-index:999;cursor:pointer;font-family:'Special Elite',serif;letter-spacing:0.08em;}
+/* WISH POPUP */
+.wish-p{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(20,12,3,0.95);border:1px solid rgba(200,160,80,0.3);border-radius:4px;padding:12px 24px;font-style:italic;color:#c8a050;font-size:0.92rem;backdrop-filter:blur(12px);z-index:9999;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;font-family:'Libre Baskerville',serif;}
+.wish-p.show{transform:translateX(-50%) translateY(0);}
+
+</style>
+
+<div class="rust-bg"></div>
+<div class="nav-dots" id="navDots"></div>
+<button id="audioBtn">🎵 Play music</button>
+<div class="wish-p" id="wishP"></div>
+
+<!-- SEC 1: LANDING -->
+<section class="section" id="sec1">
+  <div class="stamp">Time Capsule · Sealed with love</div>
+  <div class="capsule-name" id="capName"></div>
+  <div class="capsule-sub">Opened on this most special day ⏳</div>
+  <div class="postmark" id="postmark"></div>
+  <div class="scroll-down">UNSEAL ↓</div>
+</section>
+
+<!-- SEC 2: COUNTDOWN -->
+<section class="section" id="sec2">
+  <h2>⏳ SEALED UNTIL BIRTHDAY</h2>
+  <div class="telegram" id="telegramEl"></div>
+  <div class="cd-row" id="cdRow">
+    <div class="cd-u"><div class="cd-v" id="cdD">--</div><div class="cd-l">Days</div></div>
+    <div class="cd-u"><div class="cd-v" id="cdH">--</div><div class="cd-l">Hours</div></div>
+    <div class="cd-u"><div class="cd-v" id="cdM">--</div><div class="cd-l">Mins</div></div>
+    <div class="cd-u"><div class="cd-v" id="cdS">--</div><div class="cd-l">Secs</div></div>
+  </div>
+  <div class="bd-show" id="bdShow">⏳ The capsule is now open! Happy Birthday! 🎂</div>
+  <button class="cd-b locked" id="cdBtn">Unseal the Letter →</button>
+  <span class="cd-lk" id="cdLk">🔒 Sealed until your birthday</span>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 3: CHEST -->
+<section class="section" id="sec3">
+  <h2>📦 TAP TO OPEN THE TIME CAPSULE</h2>
+  <div class="capsule-chest" id="chestEl">📦</div>
+  <div class="capsule-wish" id="capsuleWish"></div>
+  <p class="wish-count" id="wishCount">0 / 5 wishes unsealed</p>
+  <p class="chest-hint">Each tap reveals a sealed wish 📜</p>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 4: CODE -->
+<section class="section" id="sec4">
+  <h2>🔐 THE WAX SEAL</h2>
+  <div class="wax-seal-img">🔴</div>
+  <p class="code-hint-v" id="codeHintV"></p>
+  <div class="code-ins">
+    <input class="code-d" maxlength="1" type="tel" id="d0"/>
+    <input class="code-d" maxlength="1" type="tel" id="d1"/>
+    <input class="code-d" maxlength="1" type="tel" id="d2"/>
+    <input class="code-d" maxlength="1" type="tel" id="d3"/>
+  </div>
+  <p class="code-st" id="codeSt">ENTER THE COMBINATION 🔐</p>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 5: LETTER -->
+<section class="section" id="sec5">
+  <h2>📜 THE SEALED LETTER</h2>
+  <div class="aged-paper">
+    <span class="letter-date" id="letterDate"></span>
+    <div class="letter-t" id="letterT"></div>
+  </div>
+  <div class="scroll-down">↓</div>
+</section>
+
+<!-- SEC 6: FINAL -->
+<section class="section" id="sec6">
+  <div class="final-ic">⏳ 📜 ⏳</div>
+  <div class="final-stamp">Time Capsule · Delivered</div>
+  <div class="final-n" id="finalN"></div>
+  <p class="final-m" id="finalM"></p>
+  <p class="final-s">✦ SEALED WITH LOVE · OPENED ON YOUR BIRTHDAY ✦</p>
+  <button class="replay-b" id="replayB">↺ Reseal & Open Again</button>
+</section>
+
+<script>
+// ── INJECT ──
+document.getElementById('capName').textContent=NAME;
+document.getElementById('finalN').textContent=NAME;
+document.getElementById('finalM').textContent=`This capsule was made to remind you, ${NAME} — you have always been worth celebrating. Happy Birthday. 💛`;
+document.getElementById('codeHintV').textContent=`This capsule was sealed with a combination known only to one person.\nEnter it to break the wax seal, ${NAME}.`;
+document.getElementById('telegramEl').textContent=`SEALED FOR: ${NAME} · OPEN ON: ${BIRTHDAY_DAY}/${BIRTHDAY_MONTH} · STATUS: AWAITING BIRTHDAY`;
+const now=new Date();
+document.getElementById('postmark').textContent=`Sent with love · ${now.getFullYear()}`;
+document.getElementById('letterDate').textContent=`${BIRTHDAY_DAY}/${BIRTHDAY_MONTH}/${now.getFullYear()} — Opened on this day.`;
+
+// ── DUST ──
+for(let i=0;i<18;i++){const d=document.createElement('div');d.className='dust';const sz=Math.random()*3+1;d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dd:${(Math.random()*6+4).toFixed(1)}s;--dx:${(Math.random()*20-10).toFixed(0)}px;--dy:${(Math.random()*20-10).toFixed(0)}px;animation-delay:${(Math.random()*4).toFixed(1)}s;`;document.body.appendChild(d);}
+
+// ── WARM LIGHTS ──
+[{left:'15%',top:'20%',color:'rgba(220,150,50,'},{left:'75%',top:'60%',color:'rgba(180,120,40,'},{left:'50%',top:'80%',color:'rgba(200,140,60,'}].forEach(l=>{const el=document.createElement('div');el.className='warm-light';el.style.cssText=`width:300px;height:300px;background:radial-gradient(circle,${l.color}0.1) 0%,transparent 70%);left:${l.left};top:${l.top};`;document.body.appendChild(el);});
+
+// ── SHOOTING STARS ──
+const wishes=[`⭐ A sealed wish for ${NAME}!`,'📜 The capsule remembers!','✨ Time has been waiting for this moment!','🌟 Delivered from the past!','💛 Sealed with love, opened today!'];
+function spawnStar(){
+  const s=document.createElement('div');
+  s.style.cssText=`position:fixed;width:3px;height:3px;background:#f0d880;border-radius:50%;top:${Math.random()*50}%;left:${Math.random()*60}%;z-index:4;cursor:pointer;filter:drop-shadow(0 0 6px #f0d880);`;
+  document.body.appendChild(s);
+  let t=setTimeout(()=>{if(document.body.contains(s)){s.remove();spawnStar();}},5000);
+  function fire(){clearTimeout(t);const p=document.getElementById('wishP');p.textContent=wishes[Math.floor(Math.random()*wishes.length)];p.classList.add('show');setTimeout(()=>p.classList.remove('show'),2500);setTimeout(()=>{s.remove();spawnStar();},800);}
+  s.addEventListener('touchstart',(e)=>{e.preventDefault();fire();},{passive:false});
+  s.addEventListener('click',fire);
+}
+for(let i=0;i<3;i++) setTimeout(spawnStar,i*1800+500);
+
+// ── NAV ──
+// ── GATE ──
+document.querySelectorAll('.section').forEach(s=>{if(s.id!=='sec1'&&s.id!=='sec2')s.classList.add('locked-section');});
+
+// ── NAV ──
+const sections=document.querySelectorAll('.section');
+const navEl=document.getElementById('navDots');
+sections.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.addEventListener('touchstart',(e)=>{e.preventDefault();sections[i].scrollIntoView({behavior:'smooth'});},{passive:false});d.addEventListener('click',()=>sections[i].scrollIntoView({behavior:'smooth'}));navEl.appendChild(d);});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');const idx=Array.from(sections).indexOf(e.target);document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));if(e.target.id==='sec6')finalConf();}});},{threshold:0.4});
+sections.forEach(s=>obs.observe(s));
+
+// ── CHEST TAP ──
+let wishIdx=0;
+const chestEl=document.getElementById('chestEl');
+function tapChest(){
+  if(wishIdx>=SEALED_WISHES.length)return;
+  const msg=document.getElementById('capsuleWish');
+  msg.classList.remove('show');
+  setTimeout(()=>{msg.textContent=SEALED_WISHES[wishIdx];msg.classList.add('show');wishIdx++;document.getElementById('wishCount').textContent=`${wishIdx} / ${SEALED_WISHES.length} wishes unsealed`;},200);
+  conf(5,'#c8a050');
+  chestEl.style.animation='none';setTimeout(()=>chestEl.style.animation='',50);
+}
+chestEl.addEventListener('touchstart',(e)=>{e.preventDefault();tapChest();},{passive:false});
+chestEl.addEventListener('click',tapChest);
+
+// ── COUNTDOWN ──
+function pad(n){return String(n).padStart(2,'0');}
+let bdReached=false;
+(function(){const now=new Date();const td=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();const bd=now.getFullYear()*10000+BIRTHDAY_MONTH*100+BIRTHDAY_DAY;if(td===bd){bdReached=true;unlockCd();}})();
+function tick(){const now=new Date();const target=new Date(now.getFullYear(),BIRTHDAY_MONTH-1,BIRTHDAY_DAY,0,0,0);const diff=target-now;if(diff<=0){if(!bdReached){bdReached=true;document.getElementById('cdRow').style.display='none';document.getElementById('bdShow').classList.add('show');unlockCd();}return;}document.getElementById('cdD').textContent=pad(Math.floor(diff/86400000));document.getElementById('cdH').textContent=pad(Math.floor((diff%86400000)/3600000));document.getElementById('cdM').textContent=pad(Math.floor((diff%3600000)/60000));document.getElementById('cdS').textContent=pad(Math.floor((diff%60000)/1000));}
+function unlockCd(){const btn=document.getElementById('cdBtn');btn.classList.remove('locked');btn.classList.add('unlocked');document.getElementById('cdLk').classList.add('hidden');conf(20,'#c8a050');document.querySelectorAll('.locked-section').forEach(s=>s.classList.remove('locked-section'));}
+const cdB=document.getElementById('cdBtn');
+function handleCd(){if(bdReached){document.getElementById('sec4').scrollIntoView({behavior:'smooth'});}else{cdB.classList.add('shake');setTimeout(()=>cdB.classList.remove('shake'),350);}}
+cdB.addEventListener('touchstart',(e)=>{e.preventDefault();handleCd();},{passive:false});
+cdB.addEventListener('click',handleCd);
+tick();const ti=setInterval(()=>{if(bdReached){clearInterval(ti);return;}tick();},1000);
+
+// ── CODE ──
+const digs=document.querySelectorAll('.code-d');
+digs.forEach((inp,i)=>{inp.addEventListener('input',()=>{inp.value=inp.value.slice(-1).replace(/\D/,'');if(inp.value&&i<3)digs[i+1].focus();chkCode();});inp.addEventListener('keydown',(e)=>{if(e.key==='Backspace'&&!inp.value&&i>0)digs[i-1].focus();});});
+function chkCode(){
+  const entered=Array.from(digs).map(d=>d.value).join('');
+  if(entered.length<4)return;
+  if(entered===SECRET_CODE){document.getElementById('codeSt').textContent='✅ Seal broken!';document.getElementById('codeSt').style.color='#44cc44';digs.forEach(d=>d.classList.add('correct'));conf(15,'#c8a050');setTimeout(()=>{document.getElementById('sec5').scrollIntoView({behavior:'smooth'});typeLetter();},900);}
+  else{digs.forEach(d=>{d.classList.add('wrong');setTimeout(()=>d.classList.remove('wrong'),400);d.value='';});document.getElementById('codeSt').textContent='❌ Wrong combination!';document.getElementById('codeSt').style.color='#ff6666';setTimeout(()=>digs[0].focus(),420);}
+}
+
+// ── LETTER ──
+let letterDone=false;
+function typeLetter(){if(letterDone)return;letterDone=true;const el=document.getElementById('letterT');el.textContent='';let i=0;const iv=setInterval(()=>{if(i<LETTER.length){el.textContent+=LETTER[i];i++;}else{clearInterval(iv);conf(15,'#c8a050');}},22);}
+
+// ── AUDIO ENGINE ──
+let audioCtx=null,isPlaying=false,audioReady=false,currentSong=window.MUSIC||'piano',activeSources=[];
+function getAudioCtx(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch(e){return null;}}
+function unlockAudio(){if(audioReady)return;try{const ctx=getAudioCtx();if(!ctx)return;const b=ctx.createBuffer(1,1,ctx.sampleRate);const s=ctx.createBufferSource();s.buffer=b;s.connect(ctx.destination);s.start(0);audioReady=true;}catch(e){}}
+document.addEventListener('touchstart',unlockAudio,{once:true});
+document.addEventListener('click',unlockAudio,{once:true});
+const NOTES={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99};
+const {C4,D4,E4,F4,G4,A4,B4,C5,D5,E5,F5,G5}=NOTES;
+const HB_NOTES=[[G4,0,.75],[G4,.75,.25],[A4,1,1],[G4,2,1],[C5,3,1],[B4,4,2],[G4,6,.75],[G4,6.75,.25],[A4,7,1],[G4,8,1],[D5,9,1],[C5,10,2],[G4,12,.75],[G4,12.75,.25],[G5,13,1],[E5,14,1],[C5,15,.75],[B4,15.75,.25],[A4,16,2],[F5,18,.75],[F5,18.75,.25],[E5,19,1],[C5,20,1],[D5,21,1],[C5,22,3]];
+function makeReverb(ctx,secs=1.5){const conv=ctx.createConvolver();const len=ctx.sampleRate*secs;const buf=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);}conv.buffer=buf;return conv;}
+function stopAllSources(){activeSources.forEach(s=>{try{s.stop();}catch(e){}});activeSources=[];}
+function playNote(ctx,dest,freq,start,dur,type='triangle',vol=0.4,attack=0.05,decay=0.2){const osc=ctx.createOscillator();const g=ctx.createGain();osc.type=type;osc.frequency.value=freq;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(vol,start+attack);g.gain.exponentialRampToValueAtTime(vol*0.4,start+decay);g.gain.exponentialRampToValueAtTime(0.001,start+dur);osc.connect(g);g.connect(dest);osc.start(start);osc.stop(start+dur+0.1);activeSources.push(osc);}
+const SONGS={
+  piano:{label:'🎹 Piano',play(ctx,master,startOffset){const rev=makeReverb(ctx,2);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.35;rg.connect(rev);const BPM=130,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.9,'triangle',0.4,0.05,0.2);playNote(ctx,rg,f*2.005,ctx.currentTime+startOffset+t*B,d*B*0.9,'sine',0.12,0.05,0.2);});return 25*B;}},
+  rock:{label:'🎸 Rock',play(ctx,master,startOffset){const BPM=180,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.85,'sawtooth',0.35,0.01,0.05);playNote(ctx,master,f*1.5,ctx.currentTime+startOffset+t*B,d*B*0.5,'square',0.08,0.01,0.05);});for(let i=0;i<25;i+=1){const t=ctx.currentTime+startOffset+i*B;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+0.1);g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.12);o.connect(g);g.connect(master);o.start(t);o.stop(t+0.15);activeSources.push(o);}return 25*B;}},
+  orchestral:{label:'🎻 Orchestral',play(ctx,master,startOffset){const rev=makeReverb(ctx,3);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.6;rg.connect(rev);const BPM=100,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{[-0.02,-0.01,0,0.01,0.02].forEach((dt)=>{playNote(ctx,rg,f*(1+dt),ctx.currentTime+startOffset+t*B,d*B*0.95,'sawtooth',0.06,0.08,0.3);});if(t%2===0)playNote(ctx,master,f*0.5,ctx.currentTime+startOffset+t*B,d*B*0.5,'square',0.08,0.02,0.1);});return 25*B;}},
+  jazz:{label:'🎺 Jazz',play(ctx,master,startOffset){const rev=makeReverb(ctx,1.2);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.3;rg.connect(rev);const BPM=145,B=60/BPM;HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,master,f,ctx.currentTime+startOffset+t*B,d*B*0.8,'square',0.25,0.03,0.08);playNote(ctx,rg,f*2,ctx.currentTime+startOffset+t*B,d*B*0.6,'sine',0.1,0.03,0.08);});const bassNotes=[C4,G4,A4,G4,C4,D4,E4,G4,C4,G4,F4,G4,C4,A4,G4,F4,E4,D4,C4,G4,F4,E4,D4,C4,C4];bassNotes.forEach((f,i)=>{playNote(ctx,master,f*0.5,ctx.currentTime+startOffset+i*B,B*0.7,'triangle',0.18,0.01,0.05);});return 25*B;}},
+  lofi:{label:'🎧 Lo-fi',play(ctx,master,startOffset){const BPM=90,B=60/BPM;const rev=makeReverb(ctx,2.5);rev.connect(master);const rg=ctx.createGain();rg.gain.value=0.5;rg.connect(rev);HB_NOTES.forEach(([f,t,d])=>{playNote(ctx,rg,f,ctx.currentTime+startOffset+t*B,d*B*1.1,'sine',0.35,0.08,0.4);playNote(ctx,rg,f*0.5,ctx.currentTime+startOffset+t*B,d*B*1.2,'sine',0.1,0.1,0.5);});return 25*B;}}
+};
+let loopTimeout=null;
+function startSong(songKey){
+  stopAllSources();
+  if(loopTimeout){clearTimeout(loopTimeout);loopTimeout=null;}
+  currentSong=songKey;
+  try{
+    const ctx=getAudioCtx();if(!ctx)return;
+    const master=ctx.createGain();master.gain.value=0.06;master.connect(ctx.destination);
+    const song=SONGS[songKey]||SONGS.piano;
+    const dur=song.play(ctx,master,0.1);
+    function loop(){const ctx2=getAudioCtx();if(!ctx2)return;const master2=ctx2.createGain();master2.gain.value=0.06;master2.connect(ctx2.destination);song.play(ctx2,master2,0.1);loopTimeout=setTimeout(loop,(dur+0.5)*1000);}
+    loopTimeout=setTimeout(loop,(dur+0.5)*1000);
+    
+  }catch(e){}
+}
+function startAudio(){
+  if(isPlaying)return;isPlaying=true;
+  document.getElementById('audioBtn').style.display='none';
+  
+  startSong(currentSong);
+}
+const audioBtn=document.getElementById('audioBtn');
+audioBtn.addEventListener('touchstart',(e)=>{e.preventDefault();startAudio();},{passive:false});
+audioBtn.addEventListener('click',startAudio);
+
+// ── FINAL ──
+let finalDone=false;
+function finalConf(){if(finalDone)return;finalDone=true;setTimeout(()=>{conf(40,'#c8a050');conf(30,'#f0d880');},300);}
+const replayB=document.getElementById('replayB');
+replayB.addEventListener('touchstart',(e)=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});},{passive:false});
+replayB.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+function conf(count,color){for(let i=0;i<count;i++){const c=document.createElement('div');c.className='cp';c.style.cssText=`left:${Math.random()*100}vw;top:0;background:${color};width:${Math.random()*7+3}px;height:${Math.random()*7+3}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${(Math.random()*1.5+1).toFixed(1)}s;animation-delay:${(Math.random()*.4).toFixed(1)}s;`;document.body.appendChild(c);setTimeout(()=>c.remove(),2500);}}
+</script>
+</body>
+</html>
